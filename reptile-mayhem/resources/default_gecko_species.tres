@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="GeckoSpeciesData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/gecko_species_data.gd" id="1_species"]
+
+[resource]
+script = ExtResource("1_species")
+species_name = "Leopard Gecko"
+ideal_temp_range = Vector2(24, 32)
+ideal_humidity_range = Vector2(30, 50)
+env_damage_rate = 2.0
+accepted_food_types = Array[int]([0])
+preferred_biome = 2
+max_health = 100.0
+incorrect_food_damage = 15.0

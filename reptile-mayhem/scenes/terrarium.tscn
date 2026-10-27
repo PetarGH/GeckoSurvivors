@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://b6p54lc2uj87w"]
+
+[ext_resource type="Script" uid="uid://belxfkw42bho3" path="res://scripts/terrarium.gd" id="1_terrarium"]
+[ext_resource type="PackedScene" uid="uid://divyejpdvexm4" path="res://scenes/gecko.tscn" id="2_gecko"]
+[ext_resource type="PackedScene" path="res://scenes/environment_manager.tscn" id="3_env"]
+
+[node name="Terrarium" type="Node3D" unique_id=1625053110 node_paths=PackedStringArray("gecko", "environment")]
+script = ExtResource("1_terrarium")
+gecko = NodePath("Gecko")
+environment = NodePath("EnvironmentManager")
+
+[node name="Gecko" parent="." unique_id=1090114261 instance=ExtResource("2_gecko")]
+
+[node name="EnvironmentManager" parent="." unique_id=92521769 instance=ExtResource("3_env")]
