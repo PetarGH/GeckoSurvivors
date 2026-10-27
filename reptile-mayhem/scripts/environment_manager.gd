@@ -6,6 +6,8 @@ signal environment_updated(temp: float, humidity: float)
 
 const MIN_HUMIDITY: float = 0.0
 const MAX_HUMIDITY: float = 100.0
+const MIN_TEMP: float = 0.0
+const MAX_TEMP: float = 100.0
 
 @export var current_temp: float = 26.0
 @export_range(0.0, 100.0, 0.1) var current_humidity: float = 50.0
@@ -19,7 +21,11 @@ const MAX_HUMIDITY: float = 100.0
 
 
 func _process(delta: float) -> void:
-	current_temp = move_toward(current_temp, ambient_temp, temp_cooling_rate * delta)
+	current_temp = clampf(
+		move_toward(current_temp, ambient_temp, temp_cooling_rate * delta),
+		MIN_TEMP,
+		MAX_TEMP
+	)
 	current_humidity = clampf(
 		current_humidity - humidity_decay_rate * delta,
 		MIN_HUMIDITY,
@@ -30,7 +36,9 @@ func _process(delta: float) -> void:
 
 ## Applies heat over [param delta] seconds, raising [member current_temp].
 func apply_heat(delta: float) -> void:
-	current_temp += heat_increase_rate * delta
+	if delta <= 0.0:
+		return
+	current_temp = clampf(current_temp + heat_increase_rate * delta, MIN_TEMP, MAX_TEMP)
 	environment_updated.emit(current_temp, current_humidity)
 
 

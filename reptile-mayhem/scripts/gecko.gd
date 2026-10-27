@@ -1,13 +1,17 @@
 class_name Gecko
-extends Node3D
+extends CharacterBody3D
 ## Represents a gecko inhabitant within a [Terrarium] driven by [GeckoSpeciesData].
 
 signal health_depleted()
 signal health_changed(new_health: float)
 
-@export var species_data: GeckoSpeciesData
+var current_health: float = 0.0
 
-var current_health: float = 100.0
+@export var species_data: GeckoSpeciesData:
+	set(value):
+		species_data = value
+		if is_node_ready() and species_data != null:
+			current_health = clampf(current_health, 0.0, species_data.max_health)
 
 
 func _ready() -> void:
@@ -30,17 +34,17 @@ func process_environment(current_temp: float, current_humidity: float, delta: fl
 	var humidity_out_of_range: bool = not species_data.is_humidity_ideal(current_humidity)
 
 	if temp_out_of_range or humidity_out_of_range:
-		take_damage(species_data.env_damage_rate * delta)
+		_take_damage(species_data.env_damage_rate * delta)
 
 
 ## Feeds the gecko a [FoodItem], applying damage if the food type is not accepted by its species,
 ## and consumes the food item.
 func feed(food: FoodItem) -> void:
-	if food == null:
+	if food == null or food.is_consumed() or not is_alive():
 		return
 
 	if species_data != null and not species_data.is_food_accepted(food.food_type):
-		take_damage(species_data.incorrect_food_damage)
+		_take_damage(species_data.incorrect_food_damage)
 
 	food.consume()
 
@@ -56,6 +60,18 @@ func evaluate_prop_multiplier(prop: Prop) -> float:
 	return 0.0
 
 
+## Returns true if the gecko has remaining health.
+func is_alive() -> bool:
+	return current_health > 0.0
+
+
+## Returns true if the gecko is alive, has valid species data, and accepts [param food].
+func can_accept_food(food: FoodItem) -> bool:
+	if food == null or not is_alive() or species_data == null:
+		return false
+	return species_data.is_food_accepted(food.food_type)
+
+
 ## Reduces [member current_health] by [param amount] and emits [signal health_changed]
 ## and [signal health_depleted] when health reaches zero.
 func take_damage(amount: float) -> void:
@@ -63,9 +79,11 @@ func take_damage(amount: float) -> void:
 		return
 
 	current_health = maxf(current_health - amount, 0.0)
+	if is_zero_approx(current_health):
+		current_health = 0.0
 	health_changed.emit(current_health)
 
-	if is_zero_approx(current_health):
+	if current_health <= 0.0:
 		health_depleted.emit()
 
 
