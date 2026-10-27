@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://b5mgtdynv3jll"]
+
+[ext_resource type="Script" uid="uid://belxfkw42bho3" path="res://scripts/terrarium.gd" id="1_ppgk2"]
+[ext_resource type="PackedScene" path="res://scenes/environment_manager.tscn" id="2_2r41h"]
+[ext_resource type="PackedScene" path="res://scenes/gecko.tscn" id="3_klq6b"]
+[ext_resource type="PackedScene" uid="uid://xcb4c38xnl12" path="res://meshes/M_Terrarium.glb" id="4_b121j"]
+[ext_resource type="Material" uid="uid://kl3b2cq4sdoe" path="res://materials/A_gecko_game_palette.material" id="5_8c41q"]
+[ext_resource type="PackedScene" uid="uid://b1agt0atug66j" path="res://meshes/M_Gekko_Player_Blockout.glb" id="6_2r41h"]
+
+[node name="Level" type="Node3D" unique_id=89402164 node_paths=PackedStringArray("gecko", "environment")]
+script = ExtResource("1_ppgk2")
+gecko = NodePath("Gecko")
+environment = NodePath("EnvironmentManager")
+
+[node name="EnvironmentManager" parent="." unique_id=604013428 instance=ExtResource("2_2r41h")]
+
+[node name="Gecko" parent="." unique_id=1282147784 instance=ExtResource("3_klq6b")]
+visible = false
+
+[node name="M_Terrarium" parent="." unique_id=1469232044 instance=ExtResource("4_b121j")]
+
+[node name="Terrarium" parent="M_Terrarium" index="0" unique_id=1022728638]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0018009543, 0.0019363165, -0.0011450052)
+material_override = ExtResource("5_8c41q")
+
+[node name="M_Gekko_Player_Blockout" parent="." unique_id=271503607 instance=ExtResource("6_2r41h")]
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=665764239]
+transform = Transform3D(1, 0, 0, 0, 0.7071068, 0.7071068, 0, -0.7071068, 0.7071068, 0, 5.4999995, 5)
+fov = 25.0
+
+[editable path="M_Terrarium"]
