@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/prop.gd" id="1_prop"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_prop"]
+size = Vector3(0.5, 0.5, 0.5)
+
+[node name="Prop" type="Node3D"]
+script = ExtResource("1_prop")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_prop")

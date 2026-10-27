@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/gecko.gd" id="1_gecko"]
+[ext_resource type="Resource" path="res://resources/default_gecko_species.tres" id="2_species"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_gecko"]
+radius = 0.3
+height = 1.2
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_hitbox"]
+radius = 0.5
+
+[node name="Gecko" type="Node3D"]
+script = ExtResource("1_gecko")
+species_data = ExtResource("2_species")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.3, 0)
+mesh = SubResource("CapsuleMesh_gecko")
+
+[node name="InteractionArea" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractionArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+shape = SubResource("SphereShape3D_hitbox")
