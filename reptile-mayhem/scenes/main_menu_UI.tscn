@@ -1,0 +1,61 @@
+[gd_scene format=3 uid="uid://cfut2skymw6nc"]
+
+[ext_resource type="Script" uid="uid://chvxukuyyvg0k" path="res://scripts/main_menu_ui.gd" id="1_nqyyv"]
+[ext_resource type="PackedScene" uid="uid://b5mgtdynv3jll" path="res://scenes/level.tscn" id="2_t8wao"]
+
+[node name="MainMenuUI" type="Control" unique_id=7696687]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_nqyyv")
+next_scene = ExtResource("2_t8wao")
+
+[node name="PlayButton" type="Button" parent="." unique_id=1908269613]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -209.0
+offset_top = -59.0
+offset_right = 209.0
+offset_bottom = 59.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 75
+text = "Play"
+
+[node name="ExitButton" type="Button" parent="." unique_id=1070397800]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.785
+anchor_right = 0.5
+anchor_bottom = 0.785
+offset_left = -131.0
+offset_top = -44.680023
+offset_right = 134.0
+offset_bottom = 44.319977
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 40
+text = "Exit"
+
+[node name="Label" type="Label" parent="." unique_id=1140901656]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.272
+offset_bottom = -0.25601196
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 102
+text = "REPTILE MAYHEM"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="PlayButton" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="ExitButton" to="." method="_on_exit_button_pressed"]
