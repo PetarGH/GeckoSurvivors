@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://belxfkw42bho3" path="res://scripts/terrarium.gd" id="1_ppgk2"]
 [ext_resource type="PackedScene" uid="uid://b6p54lc2uj87w" path="res://scenes/terrarium.tscn" id="3_mx8sn"]
+[ext_resource type="Script" uid="uid://b0jorqba6lm6" path="res://scripts/StartGame.gd" id="4_mx8sn"]
 [ext_resource type="PackedScene" uid="uid://nrtk8rhis24l" path="res://scenes/spawner.tscn" id="6_klq6b"]
 
 [sub_resource type="Environment" id="Environment_1vivr"]
@@ -70,6 +71,36 @@ spawn_interval = 0.2
 
 [node name="Terrarium" parent="." unique_id=1625053110 instance=ExtResource("3_mx8sn")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0047346354, 0.008702278, -0.19663143)
+
+[node name="Node" type="Node" parent="." unique_id=2127695471 node_paths=PackedStringArray("countdown_timer", "countdown_label", "spawners")]
+script = ExtResource("4_mx8sn")
+countdown_timer = NodePath("Timer")
+countdown_label = NodePath("CanvasLayer/Label")
+spawners = [NodePath("../Spawner"), NodePath("../Spawner2"), NodePath("../Spawner3"), NodePath("../Spawner4")]
+
+[node name="Timer" type="Timer" parent="Node" unique_id=1413627034]
+wait_time = 3.0
+one_shot = true
+autostart = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="Node" unique_id=1083905237]
+
+[node name="Label" type="Label" parent="Node/CanvasLayer" unique_id=853976328]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -219.0
+offset_top = -41.0
+offset_right = 219.0
+offset_bottom = 41.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 77
+text = "3"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [editable path="Terrarium"]
 [editable path="Terrarium/M_Terrarium"]

@@ -21,7 +21,6 @@ func _ready() -> void:
 	spawn_timer.timeout.connect(spawn_object)
 
 	add_child.call_deferred(spawn_timer)
-	start_spawning.call_deferred()
 
 
 func start_spawning() -> void:
