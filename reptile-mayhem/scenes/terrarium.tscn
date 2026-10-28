@@ -1,8 +1,9 @@
 [gd_scene format=3 uid="uid://b6p54lc2uj87w"]
 
 [ext_resource type="Script" uid="uid://belxfkw42bho3" path="res://scripts/terrarium.gd" id="1_terrarium"]
-[ext_resource type="PackedScene" uid="uid://divyejpdvexm4" path="res://scenes/gecko.tscn" id="2_gecko"]
-[ext_resource type="PackedScene" path="res://scenes/environment_manager.tscn" id="3_env"]
+[ext_resource type="PackedScene" uid="uid://bm2n6xi6wmph5" path="res://scenes/gecko.tscn" id="2_gecko"]
+[ext_resource type="PackedScene" uid="uid://xcb4c38xnl12" path="res://meshes/M_Terrarium.glb" id="3_qlrmg"]
+[ext_resource type="Script" uid="uid://l2nlktutwdvd" path="res://scripts/environment_manager.gd" id="4_qlx32"]
 
 [node name="Terrarium" type="Node3D" unique_id=1625053110 node_paths=PackedStringArray("gecko", "environment")]
 script = ExtResource("1_terrarium")
@@ -11,4 +12,16 @@ environment = NodePath("EnvironmentManager")
 
 [node name="Gecko" parent="." unique_id=1090114261 instance=ExtResource("2_gecko")]
 
-[node name="EnvironmentManager" parent="." unique_id=92521769 instance=ExtResource("3_env")]
+[node name="M_Terrarium" parent="." unique_id=125556667 instance=ExtResource("3_qlrmg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1136713, 0, 0.34252787)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=1236458200]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15637207, 1.501236, 0.38256836)
+visible = false
+size = Vector3(8.272583, 3.0050964, 4.083496)
+
+[node name="EnvironmentManager" type="Node" parent="." unique_id=564750640]
+script = ExtResource("4_qlx32")
+metadata/_custom_type_script = "uid://l2nlktutwdvd"
+
+[editable path="M_Terrarium"]

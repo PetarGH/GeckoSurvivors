@@ -1,28 +1,30 @@
 [gd_scene format=3 uid="uid://b5mgtdynv3jll"]
 
 [ext_resource type="Script" uid="uid://belxfkw42bho3" path="res://scripts/terrarium.gd" id="1_ppgk2"]
-[ext_resource type="PackedScene" path="res://scenes/environment_manager.tscn" id="2_2r41h"]
-[ext_resource type="PackedScene" uid="uid://bm2n6xi6wmph5" path="res://scenes/gecko.tscn" id="3_klq6b"]
-[ext_resource type="PackedScene" uid="uid://xcb4c38xnl12" path="res://meshes/M_Terrarium.glb" id="4_b121j"]
-[ext_resource type="Material" uid="uid://kl3b2cq4sdoe" path="res://materials/A_gecko_game_palette.material" id="5_8c41q"]
+[ext_resource type="PackedScene" uid="uid://b6p54lc2uj87w" path="res://scenes/terrarium.tscn" id="3_mx8sn"]
+[ext_resource type="PackedScene" uid="uid://nrtk8rhis24l" path="res://scenes/spawner.tscn" id="6_klq6b"]
 
-[node name="Level" type="Node3D" unique_id=89402164 node_paths=PackedStringArray("gecko", "environment")]
+[sub_resource type="Environment" id="Environment_1vivr"]
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_1vivr"]
+vertices = PackedVector3Array(-20.374268, 0.52, -14.5, -20.374268, 0.52, 14.5, 18.625732, 0.52, 14.5, 18.625732, 0.52, -14.5)
+polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1)]
+cell_height = 0.01
+agent_max_slope = 70.67
+vertices_per_polygon = 8.0
+
+[node name="Level" type="Node3D" unique_id=89402164]
 script = ExtResource("1_ppgk2")
-gecko = NodePath("Gecko")
-environment = NodePath("EnvironmentManager")
 
-[node name="EnvironmentManager" parent="." unique_id=604013428 instance=ExtResource("2_2r41h")]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=900064872]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+shadow_enabled = true
 
-[node name="Gecko" parent="." unique_id=1282147784 instance=ExtResource("3_klq6b")]
-
-[node name="M_Terrarium" parent="." unique_id=1469232044 instance=ExtResource("4_b121j")]
-
-[node name="Terrarium" parent="M_Terrarium" index="0" unique_id=1022728638]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0018009543, 0.0019363165, -0.0011450052)
-material_override = ExtResource("5_8c41q")
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1066273817]
+environment = SubResource("Environment_1vivr")
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=665764239]
-transform = Transform3D(1, 0, 0, 0, 0.7071068, 0.7071068, 0, -0.7071068, 0.7071068, 0, 6.4999995, 6)
+transform = Transform3D(1, 0, 0, 0, 0.7071068, 0.7071068, 0, -0.7071068, 0.7071068, 0, 19.476152, 22.905676)
 fov = 25.0
 
 [node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=1570634469]
@@ -33,4 +35,41 @@ light_color = Color(0.98237544, 0.50737685, 0, 1)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 1, 0)
 light_color = Color(0.98237544, 0.50737685, 0, 1)
 
-[editable path="M_Terrarium"]
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=783121546]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.49260998, 5.5709095)
+navigation_mesh = SubResource("NavigationMesh_1vivr")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D" unique_id=1234824845]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.85632324, 0, 0)
+use_collision = true
+size = Vector3(40.03589, 1, 30)
+
+[node name="Spawner" parent="." unique_id=1569577388 node_paths=PackedStringArray("target_object") instance=ExtResource("6_klq6b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.13520193, 1.2982445, 12.181291)
+target_object = NodePath("../Terrarium/CSGBox3D")
+spawn_count = 20
+spawn_interval = 0.2
+
+[node name="Spawner2" parent="." unique_id=1487323120 node_paths=PackedStringArray("target_object") instance=ExtResource("6_klq6b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.515692, 1.2982445, 0.49052715)
+target_object = NodePath("../Terrarium/CSGBox3D")
+spawn_count = 20
+spawn_interval = 0.2
+
+[node name="Spawner3" parent="." unique_id=1098953022 node_paths=PackedStringArray("target_object") instance=ExtResource("6_klq6b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.464605, 1.2982445, 0.49052715)
+target_object = NodePath("../Terrarium/CSGBox3D")
+spawn_count = 20
+spawn_interval = 0.2
+
+[node name="Spawner4" parent="." unique_id=761313783 node_paths=PackedStringArray("target_object") instance=ExtResource("6_klq6b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.464605, 1.2982445, 14.1433)
+target_object = NodePath("../Terrarium/CSGBox3D")
+spawn_count = 20
+spawn_interval = 0.2
+
+[node name="Terrarium" parent="." unique_id=1625053110 instance=ExtResource("3_mx8sn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0047346354, 0.008702278, -0.19663143)
+
+[editable path="Terrarium"]
+[editable path="Terrarium/M_Terrarium"]
