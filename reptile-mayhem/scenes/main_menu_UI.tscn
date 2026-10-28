@@ -2,6 +2,19 @@
 
 [ext_resource type="Script" uid="uid://chvxukuyyvg0k" path="res://scripts/main_menu_ui.gd" id="1_nqyyv"]
 [ext_resource type="PackedScene" uid="uid://b5mgtdynv3jll" path="res://scenes/level.tscn" id="2_t8wao"]
+[ext_resource type="Theme" uid="uid://cjfwhcxlr2h4i" path="res://themes/ui_button_theme.tres" id="3_1vj7d"]
+[ext_resource type="FontFile" uid="uid://dctrfdggugy2d" path="res://fonts/Super Waffles.ttf" id="4_c5p7l"]
+
+[sub_resource type="Gradient" id="Gradient_1vj7d"]
+colors = PackedColorArray(0.08342805, 0.50625694, 0.45842367, 1, 0.19825613, 0.62338454, 0.90184987, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_qbdty"]
+gradient = SubResource("Gradient_1vj7d")
+fill = 1
+fill_from = Vector2(0.49798387, 0.51008064)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8vrlf"]
+texture = SubResource("GradientTexture2D_qbdty")
 
 [node name="MainMenuUI" type="Control" unique_id=7696687]
 layout_mode = 3
@@ -13,36 +26,49 @@ grow_vertical = 2
 script = ExtResource("1_nqyyv")
 next_scene = ExtResource("2_t8wao")
 
-[node name="PlayButton" type="Button" parent="." unique_id=1908269613]
+[node name="Panel" type="Panel" parent="." unique_id=931852066]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -209.0
-offset_top = -59.0
-offset_right = 209.0
-offset_bottom = 59.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 75
+theme_override_styles/panel = SubResource("StyleBoxTexture_8vrlf")
+
+[node name="PlayButton" type="Button" parent="." unique_id=1908269613]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.319
+anchor_top = 0.409
+anchor_right = 0.68100005
+anchor_bottom = 0.591
+offset_left = -0.4880066
+offset_top = -0.03201294
+offset_right = 0.48791504
+offset_bottom = 0.031982422
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_1vj7d")
+theme_override_fonts/font = ExtResource("4_c5p7l")
+theme_override_font_sizes/font_size = 86
 text = "Play"
 
 [node name="ExitButton" type="Button" parent="." unique_id=1070397800]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.5
-anchor_top = 0.785
-anchor_right = 0.5
-anchor_bottom = 0.785
-offset_left = -131.0
-offset_top = -44.680023
-offset_right = 134.0
-offset_bottom = 44.319977
+anchor_left = 0.386
+anchor_top = 0.716
+anchor_right = 0.61600006
+anchor_bottom = 0.85300004
+offset_left = -6.671997
+offset_top = -12.968018
+offset_right = 3.36792
+offset_bottom = 2.2559814
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_font_sizes/font_size = 40
+theme = ExtResource("3_1vj7d")
+theme_override_fonts/font = ExtResource("4_c5p7l")
+theme_override_font_sizes/font_size = 56
 text = "Exit"
 
 [node name="Label" type="Label" parent="." unique_id=1140901656]
@@ -50,8 +76,9 @@ layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 0.272
-offset_bottom = -0.25601196
+offset_bottom = 32.743988
 grow_horizontal = 2
+theme_override_fonts/font = ExtResource("4_c5p7l")
 theme_override_font_sizes/font_size = 102
 text = "REPTILE MAYHEM"
 horizontal_alignment = 1

@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://6wqir0wfchnk"]
+
+[ext_resource type="Script" uid="uid://mxjot65vscgt" path="res://grub.gd" id="1_3x5ws"]
+[ext_resource type="PackedScene" path="res://scenes/food_item.tscn" id="2_a80u5"]
+
+[node name="Grub" type="Node3D" unique_id=1955127812]
+script = ExtResource("1_3x5ws")
+
+[node name="FoodItem" parent="." unique_id=1643189141 instance=ExtResource("2_a80u5")]
