@@ -6,7 +6,7 @@ signal reached_gecko(food: FoodItem)
 
 const CURRENCY_VALUE: int = 1
 
-@export var food_type: HabitatEnums.FoodType = HabitatEnums.FoodType.BUG
+@export var food_type: HabitatEnums.FoodType = HabitatEnums.FoodType.SUPERWORM
 
 var _is_consumed: bool = false
 var _has_reached_gecko: bool = false

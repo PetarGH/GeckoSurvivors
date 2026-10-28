@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bm2n6xi6wmph5"]
 
 [ext_resource type="Script" uid="uid://04m3vn054f8n" path="res://scripts/gecko.gd" id="1_gecko"]
-[ext_resource type="Resource" path="res://resources/default_gecko_species.tres" id="2_species"]
+[ext_resource type="Resource" uid="uid://dyms6hjfemdk6" path="res://resources/default_gecko_species.tres" id="2_species"]
 [ext_resource type="PackedScene" uid="uid://b1agt0atug66j" path="res://meshes/M_Gekko_Player_Blockout.glb" id="3_yg0sq"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_gecko"]

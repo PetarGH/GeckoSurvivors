@@ -3,9 +3,14 @@ extends Object
 ## Shared enumerations for the Gecko Habitat Simulation Framework.
 
 enum FoodType {
-	BUG,
-	PLANT,
-	MAMMAL,
+	SUPERWORM,
+	GRASSHOPPER,
+	ROACH,
+	BEETLE,
+	CRICKET,
+	BANANA,
+	PAPAYA,
+	MANGO
 }
 
 enum BiomeType {
