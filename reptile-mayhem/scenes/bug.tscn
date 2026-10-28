@@ -1,0 +1,67 @@
+[gd_scene format=3 uid="uid://ejng24sn2edq"]
+
+[ext_resource type="Script" uid="uid://bds8t8xdgdel3" path="res://scripts/food_item.gd" id="1_f31lg"]
+[ext_resource type="Material" uid="uid://dek2h7yqmqi8p" path="res://materials/development/development_orange.material" id="2_sp1hu"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_sp1hu"]
+radius = 0.2
+
+[node name="Bug" type="Area3D" unique_id=726012728]
+script = ExtResource("1_f31lg")
+
+[node name="Placeholder" type="Node3D" parent="." unique_id=1560517911]
+
+[node name="CSGSphere3D" type="CSGSphere3D" parent="Placeholder" unique_id=1098152946]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0048046857, -0.16665849)
+radius = 0.1
+material = ExtResource("2_sp1hu")
+
+[node name="CSGSphere3D2" type="CSGSphere3D" parent="Placeholder" unique_id=1090431055]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.023092479)
+radius = 0.1
+material = ExtResource("2_sp1hu")
+
+[node name="CSGSphere3D3" type="CSGSphere3D" parent="Placeholder" unique_id=670001684]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.06430553, 0.09792056)
+radius = 0.08
+material = ExtResource("2_sp1hu")
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="Placeholder" unique_id=127979213]
+transform = Transform3D(-0.25881907, 0.83651626, 0.4829629, -0.9659258, -0.2241439, -0.12940952, 2.1855694e-08, -0.5, 0.8660254, 0.16021574, -0.047859192, -0.084554866)
+radius = 0.02
+height = 0.2
+material = ExtResource("2_sp1hu")
+
+[node name="CSGCylinder3D3" type="CSGCylinder3D" parent="Placeholder" unique_id=895953826]
+transform = Transform3D(-0.25881907, 0.83651626, -0.4829629, -0.9659258, -0.2241439, 0.12940952, -2.18557e-08, 0.5, 0.8660254, 0.16021574, -0.047859192, 0.033878744)
+radius = 0.02
+height = 0.2
+material = ExtResource("2_sp1hu")
+
+[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="Placeholder" unique_id=1155523540]
+transform = Transform3D(-0.25881907, 0.9659258, 0, -0.9659258, -0.25881907, 0, 0, 0, 1, 0.16021574, -0.047859192, -0.01708955)
+radius = 0.02
+height = 0.2
+material = ExtResource("2_sp1hu")
+
+[node name="CSGCylinder3D4" type="CSGCylinder3D" parent="Placeholder" unique_id=1967783386]
+transform = Transform3D(0.25000003, -0.9374222, -0.24236244, -0.9659258, -0.2241439, -0.12940952, 0.066987306, 0.26645654, -0.96151626, -0.16796678, -0.047859192, 0.0372663)
+radius = 0.02
+height = 0.2
+material = ExtResource("2_sp1hu")
+
+[node name="CSGCylinder3D5" type="CSGCylinder3D" parent="Placeholder" unique_id=74327237]
+transform = Transform3D(0.25000003, -0.6786031, 0.6906502, -0.9659258, -0.2241439, 0.12940952, 0.06698732, -0.69946927, -0.71151626, -0.1373139, -0.047859192, -0.07713178)
+radius = 0.02
+height = 0.2
+material = ExtResource("2_sp1hu")
+
+[node name="CSGCylinder3D6" type="CSGCylinder3D" parent="Placeholder" unique_id=1358692324]
+transform = Transform3D(0.25000003, -0.93301266, 0.25881907, -0.9659258, -0.25881907, 0, 0.06698731, -0.25000003, -0.9659258, -0.15050547, -0.047859192, -0.02790019)
+radius = 0.02
+height = 0.2
+material = ExtResource("2_sp1hu")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=557744303]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.011146337, -0.036017854)
+shape = SubResource("SphereShape3D_sp1hu")
