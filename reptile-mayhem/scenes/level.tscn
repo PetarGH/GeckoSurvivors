@@ -2,8 +2,17 @@
 
 [ext_resource type="Script" uid="uid://belxfkw42bho3" path="res://scripts/terrarium.gd" id="1_ppgk2"]
 [ext_resource type="PackedScene" uid="uid://b6p54lc2uj87w" path="res://scenes/terrarium.tscn" id="3_mx8sn"]
+[ext_resource type="PackedScene" uid="uid://6wqir0wfchnk" path="res://scenes/grub.tscn" id="3_ppgk2"]
+[ext_resource type="PackedScene" uid="uid://j4q85tovy8sq" path="res://scenes/beetle.tscn" id="4_b121j"]
 [ext_resource type="Script" uid="uid://b0jorqba6lm6" path="res://scripts/StartGame.gd" id="4_mx8sn"]
+[ext_resource type="PackedScene" uid="uid://dydr7rfm1h8nx" path="res://scenes/cricket.tscn" id="5_8c41q"]
 [ext_resource type="PackedScene" uid="uid://nrtk8rhis24l" path="res://scenes/spawner.tscn" id="6_klq6b"]
+[ext_resource type="PackedScene" uid="uid://wfel0wd25yj" path="res://scenes/roach.tscn" id="6_olg7q"]
+[ext_resource type="PackedScene" uid="uid://bm2n6xi6wmph5" path="res://scenes/gecko.tscn" id="7_8c41q"]
+[ext_resource type="Script" uid="uid://dtfr3ncdqchml" path="res://scripts/HealthBar3D.gd" id="8_olg7q"]
+[ext_resource type="Theme" uid="uid://kyycrg3gq8ln" path="res://themes/button.tres" id="11_8iemx"]
+[ext_resource type="Script" uid="uid://bie8qs1ktld5o" path="res://scripts/lose_screen.gd" id="11_64w2a"]
+[ext_resource type="FontFile" uid="uid://dctrfdggugy2d" path="res://fonts/Super Waffles.ttf" id="11_t1rx8"]
 
 [sub_resource type="Environment" id="Environment_1vivr"]
 
@@ -14,8 +23,31 @@ cell_height = 0.01
 agent_max_slope = 70.67
 vertices_per_polygon = 8.0
 
-[node name="Level" type="Node3D" unique_id=89402164]
+[sub_resource type="SphereShape3D" id="SphereShape3D_1vivr"]
+radius = 2.5113063
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8c41q"]
+bg_color = Color(1, 0, 0.10980392, 1)
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1vivr"]
+bg_color = Color(0, 0.44705883, 0, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_bottom = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v5gy4"]
+bg_color = Color(0.36862746, 0, 0.15686275, 0.0627451)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+
+[node name="Level" type="Node3D" unique_id=89402164 node_paths=PackedStringArray("environment")]
 script = ExtResource("1_ppgk2")
+environment = NodePath("Terrarium/EnvironmentManager")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=900064872]
 transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
@@ -47,30 +79,74 @@ size = Vector3(40.03589, 1, 30)
 
 [node name="Spawner" parent="." unique_id=1569577388 node_paths=PackedStringArray("target_object") instance=ExtResource("6_klq6b")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.13520193, 1.2982445, 12.181291)
+spawn_scenes = Array[PackedScene]([ExtResource("3_ppgk2"), ExtResource("4_b121j"), ExtResource("5_8c41q")])
 target_object = NodePath("../Terrarium/CSGBox3D")
-spawn_count = 20
-spawn_interval = 0.2
+spawn_count = 10
+spawn_interval = 1.0
 
 [node name="Spawner2" parent="." unique_id=1487323120 node_paths=PackedStringArray("target_object") instance=ExtResource("6_klq6b")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.515692, 1.2982445, 0.49052715)
+spawn_scenes = Array[PackedScene]([ExtResource("3_ppgk2"), ExtResource("6_olg7q"), ExtResource("4_b121j")])
 target_object = NodePath("../Terrarium/CSGBox3D")
-spawn_count = 20
-spawn_interval = 0.2
+spawn_count = 10
+spawn_interval = 1.0
 
 [node name="Spawner3" parent="." unique_id=1098953022 node_paths=PackedStringArray("target_object") instance=ExtResource("6_klq6b")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.464605, 1.2982445, 0.49052715)
+spawn_scenes = Array[PackedScene]([ExtResource("3_ppgk2"), ExtResource("5_8c41q")])
 target_object = NodePath("../Terrarium/CSGBox3D")
-spawn_count = 20
-spawn_interval = 0.2
+spawn_count = 10
+spawn_interval = 1.0
+
+[node name="Gecko" parent="." unique_id=1937517286 node_paths=PackedStringArray("wander_bounds", "eat_area") instance=ExtResource("7_8c41q")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4862976, -0.010196209, 0.67551327)
+SPEED = 2.0
+wander_bounds = NodePath("../Terrarium/CSGBox3D")
+roam_delay = 3.0
+eat_area = NodePath("Area3D")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="Gecko" unique_id=519854774]
+
+[node name="Area3D" type="Area3D" parent="Gecko" unique_id=1363527058]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Gecko/Area3D" unique_id=1067648084]
+shape = SubResource("SphereShape3D_1vivr")
+
+[node name="Node3D" type="Node3D" parent="Gecko" unique_id=297244950]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.67002463, 0.15575123)
+script = ExtResource("8_olg7q")
+
+[node name="SubViewport" type="SubViewport" parent="Gecko/Node3D" unique_id=2096302278]
+size = Vector2i(256, 256)
+
+[node name="Control" type="Control" parent="Gecko/Node3D/SubViewport" unique_id=1067705823]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ProgressBar" type="ProgressBar" parent="Gecko/Node3D/SubViewport/Control" unique_id=861907646]
+layout_mode = 0
+offset_left = 366.0
+offset_top = 38.0
+offset_right = 649.0
+offset_bottom = 76.0
+theme_override_styles/background = SubResource("StyleBoxFlat_8c41q")
+theme_override_styles/fill = SubResource("StyleBoxFlat_1vivr")
+value = 84.78
+
+[node name="Sprite3D" type="Sprite3D" parent="Gecko/Node3D" unique_id=12150594]
 
 [node name="Spawner4" parent="." unique_id=761313783 node_paths=PackedStringArray("target_object") instance=ExtResource("6_klq6b")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.464605, 1.2982445, 14.1433)
+spawn_scenes = Array[PackedScene]([ExtResource("3_ppgk2"), ExtResource("6_olg7q")])
 target_object = NodePath("../Terrarium/CSGBox3D")
-spawn_count = 20
-spawn_interval = 0.2
+spawn_count = 10
+spawn_interval = 1.0
 
-[node name="Terrarium" parent="." unique_id=1625053110 instance=ExtResource("3_mx8sn")]
+[node name="Terrarium" parent="." unique_id=1625053110 node_paths=PackedStringArray("gecko") instance=ExtResource("3_mx8sn")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0047346354, 0.008702278, -0.19663143)
+gecko = NodePath("../Gecko")
 
 [node name="Node" type="Node" parent="." unique_id=2127695471 node_paths=PackedStringArray("countdown_timer", "countdown_label", "spawners")]
 script = ExtResource("4_mx8sn")
@@ -101,6 +177,62 @@ theme_override_font_sizes/font_size = 77
 text = "3"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="LoseScreen" type="Control" parent="." unique_id=1192377682 node_paths=PackedStringArray("gecko")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("11_64w2a")
+main_menu_scene_path = "uid://ds4vu0sanlswx"
+gecko = NodePath("../Gecko")
+
+[node name="ColorRect" type="ColorRect" parent="LoseScreen" unique_id=1119220968]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.40392157, 0.40392157, 0.40392157, 0.59607846)
+
+[node name="Button" type="Button" parent="LoseScreen/ColorRect" unique_id=116396958]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.887
+anchor_top = 0.87100005
+anchor_right = 0.887
+anchor_bottom = 0.87100005
+offset_left = -167.82404
+offset_top = -46.40802
+offset_right = 91.175964
+offset_bottom = 23.59198
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("11_8iemx")
+theme_override_fonts/font = ExtResource("11_t1rx8")
+theme_override_font_sizes/font_size = 43
+text = "Continue >"
+
+[node name="Label" type="Label" parent="LoseScreen/ColorRect" unique_id=481304846]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 115.0
+offset_top = 55.0
+offset_right = -98.0
+offset_bottom = 220.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("11_t1rx8")
+theme_override_font_sizes/font_size = 105
+theme_override_styles/normal = SubResource("StyleBoxFlat_v5gy4")
+text = "YOU LOSE"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="LoseScreen/ColorRect/Button" to="LoseScreen" method="_on_button_pressed"]
 
 [editable path="Terrarium"]
 [editable path="Terrarium/M_Terrarium"]

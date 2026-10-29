@@ -13,7 +13,7 @@ var _has_reached_gecko: bool = false
 
 
 func _ready() -> void:
-	body_entered.connect(_on_body_entered)
+	return
 
 
 ## Consumes and removes this food item from the scene tree.
@@ -22,7 +22,7 @@ func consume() -> void:
 		return
 	_is_consumed = true
 	_has_reached_gecko = true
-	queue_free()
+	get_parent().queue_free()
 
 
 ## Returns true if this food item has already been consumed.
@@ -30,9 +30,9 @@ func is_consumed() -> bool:
 	return _is_consumed
 
 
-func _on_body_entered(body: Node3D) -> void:
+func notify_reached_gecko() -> void:
 	if _is_consumed or _has_reached_gecko:
 		return
-	if body is Gecko or body.get_parent() is Gecko:
-		_has_reached_gecko = true
-		reached_gecko.emit(self)
+
+	_has_reached_gecko = true
+	reached_gecko.emit(self)

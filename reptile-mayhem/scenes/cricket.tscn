@@ -1,0 +1,147 @@
+[gd_scene format=3 uid="uid://dydr7rfm1h8nx"]
+
+[ext_resource type="PackedScene" uid="uid://gbsy8ar0siwr" path="res://scenes/food_item.tscn" id="1_jwsfj"]
+
+[sub_resource type="GDScript" id="GDScript_c74hx"]
+script/source = "extends CharacterBody3D
+
+@export var SPEED: float = 5.0
+@export var wander_bounds: CSGBox3D
+
+@onready var nav_agent: NavigationAgent3D = $NavigationAgent3D
+
+var rng := RandomNumberGenerator.new()
+var has_target := false
+var choosing_target := false
+
+
+func _ready() -> void:
+	rng.randomize()
+
+
+func set_wander_target(target: CSGBox3D) -> void:
+	wander_bounds = target
+	has_target = false
+	choose_random_destination()
+
+
+func _physics_process(delta: float) -> void:
+	if not is_on_floor():
+		velocity += get_gravity() * delta
+
+	if wander_bounds == null or not has_target:
+		velocity.x = 0.0
+		velocity.z = 0.0
+		move_and_slide()
+		return
+
+	if nav_agent.is_navigation_finished():
+		choose_random_destination()
+
+		velocity.x = 0.0
+		velocity.z = 0.0
+		move_and_slide()
+		return
+
+	var next_position := nav_agent.get_next_path_position()
+	var direction := global_position.direction_to(next_position)
+
+	direction.y = 0.0
+	direction = direction.normalized()
+
+	velocity.x = direction.x * SPEED
+	velocity.z = direction.z * SPEED
+
+	move_and_slide()
+
+
+func choose_random_destination() -> void:
+	if wander_bounds == null or choosing_target:
+		return
+
+	choosing_target = true
+	has_target = false
+
+	var map := nav_agent.get_navigation_map()
+
+	# Wait for Godot to synchronize the navigation map.
+	for i in range(10):
+		await get_tree().physics_frame
+
+		if NavigationServer3D.map_get_iteration_id(map) > 0:
+			break
+
+	if NavigationServer3D.map_get_iteration_id(map) == 0:
+		choosing_target = false
+		push_warning(\"Navigation map is still not ready.\")
+		return
+
+	if not is_instance_valid(wander_bounds):
+		choosing_target = false
+		return
+
+	# Choose a random point inside the CSGBox3D bounds.
+	var size: Vector3 = wander_bounds.size
+
+	var random_point := Vector3(
+		rng.randf_range(-size.x / 2.0, size.x / 2.0),
+		0.0,
+		rng.randf_range(-size.z / 2.0, size.z / 2.0)
+	)
+
+	var world_point := wander_bounds.to_global(random_point)
+
+	# Snap the point onto the walkable navigation mesh.
+	var destination := NavigationServer3D.map_get_closest_point(
+		map,
+		world_point
+	)
+
+	nav_agent.target_position = destination
+
+	# Give the navigation agent a physics frame to calculate its path.
+	await get_tree().physics_frame
+
+	has_target = true
+	choosing_target = false
+
+func die() -> void:
+	queue_free()
+
+
+func _on_food_item_input_event(camera: Node, event: InputEvent, event_position: Vector3, normal: Vector3, shape_idx: int) -> void:
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			print(\"Grub clicked!\")
+			die()
+"
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_c74hx"]
+radius = 0.51
+
+[sub_resource type="SphereMesh" id="SphereMesh_1vivr"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_8vrlf"]
+
+[node name="cricket" type="CharacterBody3D" unique_id=1633903147]
+script = SubResource("GDScript_c74hx")
+
+[node name="FoodItem" parent="." unique_id=865895106 instance=ExtResource("1_jwsfj")]
+food_type = 4
+
+[node name="CollisionShape3D" parent="FoodItem" index="0" unique_id=1553226084]
+shape = SubResource("SphereShape3D_c74hx")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=2132024037]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=88537160]
+transform = Transform3D(1.8362747, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+layers = 4097
+mesh = SubResource("SphereMesh_1vivr")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1204472865]
+shape = SubResource("SphereShape3D_8vrlf")
+
+[connection signal="input_event" from="FoodItem" to="." method="_on_food_item_input_event"]
+
+[editable path="FoodItem"]

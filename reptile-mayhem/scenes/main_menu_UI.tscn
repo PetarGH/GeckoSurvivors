@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://cfut2skymw6nc"]
 
 [ext_resource type="Script" uid="uid://chvxukuyyvg0k" path="res://scripts/main_menu_ui.gd" id="1_nqyyv"]
-[ext_resource type="PackedScene" uid="uid://b5mgtdynv3jll" path="res://scenes/level.tscn" id="2_t8wao"]
-[ext_resource type="Theme" uid="uid://cjfwhcxlr2h4i" path="res://themes/ui_button_theme.tres" id="3_1vj7d"]
+[ext_resource type="PackedScene" uid="uid://b5mgtdynv3jll" path="res://scenes/level.tscn" id="2_c5p7l"]
+[ext_resource type="Theme" uid="uid://kyycrg3gq8ln" path="res://themes/button.tres" id="3_c5p7l"]
 [ext_resource type="FontFile" uid="uid://dctrfdggugy2d" path="res://fonts/Super Waffles.ttf" id="4_c5p7l"]
 
 [sub_resource type="Gradient" id="Gradient_1vj7d"]
@@ -24,7 +24,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_nqyyv")
-next_scene = ExtResource("2_t8wao")
+next_scene = ExtResource("2_c5p7l")
 
 [node name="Panel" type="Panel" parent="." unique_id=931852066]
 layout_mode = 1
@@ -48,7 +48,7 @@ offset_right = 0.48791504
 offset_bottom = 0.031982422
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("3_1vj7d")
+theme = ExtResource("3_c5p7l")
 theme_override_fonts/font = ExtResource("4_c5p7l")
 theme_override_font_sizes/font_size = 86
 text = "Play"
@@ -66,7 +66,7 @@ offset_right = 3.36792
 offset_bottom = 2.2559814
 grow_horizontal = 2
 grow_vertical = 0
-theme = ExtResource("3_1vj7d")
+theme = ExtResource("3_c5p7l")
 theme_override_fonts/font = ExtResource("4_c5p7l")
 theme_override_font_sizes/font_size = 56
 text = "Exit"

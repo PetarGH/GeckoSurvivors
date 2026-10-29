@@ -1,10 +1,14 @@
 [gd_scene format=3 uid="uid://ds4vu0sanlswx"]
 
 [ext_resource type="PackedScene" uid="uid://cfut2skymw6nc" path="res://scenes/main_menu_UI.tscn" id="1_xhf6x"]
+[ext_resource type="PackedScene" uid="uid://ci6k26ubotqkj" path="res://scenes/level_test.tscn" id="2_vfskp"]
 
 [node name="MainMenuScene" type="Node3D" unique_id=239696934]
 
-[node name="MainMenu" parent="." unique_id=7696687 instance=ExtResource("1_xhf6x")]
+[node name="MainMenuUI" parent="." unique_id=7696687 instance=ExtResource("1_xhf6x")]
+next_scene = ExtResource("2_vfskp")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=669793811]
 position = Vector2(573, 323)
+
+[editable path="MainMenuUI"]

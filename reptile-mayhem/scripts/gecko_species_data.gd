@@ -6,7 +6,7 @@ extends Resource
 @export var ideal_temp_range: Vector2 = Vector2(24.0, 30.0)
 @export var ideal_humidity_range: Vector2 = Vector2(40.0, 60.0)
 @export var env_damage_rate: float = 1.0
-@export var accepted_food_types: Array[HabitatEnums.FoodType] = [HabitatEnums.FoodType.BUG]
+@export var accepted_food_types: Array[HabitatEnums.FoodType] = [HabitatEnums.FoodType.SUPERWORM, HabitatEnums.FoodType.ROACH, HabitatEnums.FoodType.CRICKET]
 @export var preferred_biome: HabitatEnums.BiomeType = HabitatEnums.BiomeType.MEDITERRANEAN
 @export var max_health: float = 100.0
 @export var incorrect_food_damage: float = 10.0
