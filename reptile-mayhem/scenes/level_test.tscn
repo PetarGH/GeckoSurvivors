@@ -11,7 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://b6p54lc2uj87w" path="res://scenes/terrarium.tscn" id="9_blca8"]
 [ext_resource type="Script" uid="uid://b0jorqba6lm6" path="res://scripts/StartGame.gd" id="10_dsidl"]
 [ext_resource type="Script" uid="uid://bie8qs1ktld5o" path="res://scripts/lose_screen.gd" id="11_04equ"]
-[ext_resource type="PackedScene" uid="uid://ds4vu0sanlswx" path="res://scenes/main_menu_scene.tscn" id="12_4xcco"]
+[ext_resource type="PackedScene" uid="uid://cfut2skymw6nc" path="res://scenes/main_menu_UI.tscn" id="12_4xcco"]
 [ext_resource type="Theme" uid="uid://kyycrg3gq8ln" path="res://themes/button.tres" id="13_6rn2f"]
 [ext_resource type="FontFile" uid="uid://dctrfdggugy2d" path="res://fonts/Super Waffles.ttf" id="14_plnnl"]
 

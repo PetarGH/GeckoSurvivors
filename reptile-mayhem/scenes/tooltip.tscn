@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://c4yb4mko55vn8"]
+
+[ext_resource type="Script" uid="uid://b13yiml5naxp8" path="res://scripts/tool_tip.gd" id="1_75wrl"]
+[ext_resource type="FontFile" uid="uid://dctrfdggugy2d" path="res://fonts/Super Waffles.ttf" id="2_vy6iq"]
+
+[node name="Tooltip" type="PanelContainer" unique_id=1583022041]
+top_level = true
+offset_right = 166.0
+offset_bottom = 177.0
+mouse_filter = 2
+script = ExtResource("1_75wrl")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1780858801]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer" unique_id=885056475]
+layout_mode = 2
+mouse_filter = 2
+theme_override_fonts/normal_font = ExtResource("2_vy6iq")
+theme_override_fonts/bold_font = ExtResource("2_vy6iq")
+theme_override_font_sizes/normal_font_size = 18
+theme_override_font_sizes/bold_font_size = 21
+bbcode_enabled = true
+scroll_active = false

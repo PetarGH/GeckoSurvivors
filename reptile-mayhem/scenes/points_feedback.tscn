@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://me75of34kr33"]
+
+[ext_resource type="Script" uid="uid://bhyrh65hgg5ht" path="res://scripts/points_feedback.gd" id="1_355ex"]
+[ext_resource type="FontFile" uid="uid://dctrfdggugy2d" path="res://fonts/Super Waffles.ttf" id="1_p11d5"]
+[ext_resource type="Texture2D" uid="uid://chgp5s8e15l4l" path="res://images/Bright Red Heart Icon.png" id="2_355ex"]
+
+[node name="PointsFeedback" type="Node3D" unique_id=1077221792]
+script = ExtResource("1_355ex")
+
+[node name="AmountLabel" type="Label3D" parent="." unique_id=578271873]
+billboard = 1
+text = "+10 "
+font = ExtResource("1_p11d5")
+font_size = 64
+outline_size = 8
+
+[node name="HPIcon" type="Sprite3D" parent="." unique_id=2123460662]
+transform = Transform3D(0.0718635, 0, 0, 0, 0.0718635, 0, 0, 0, 0.0718635, 0.020407677, 0, 0)
+visible = false
+billboard = 1
+texture = ExtResource("2_355ex")

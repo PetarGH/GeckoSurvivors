@@ -1,6 +1,5 @@
 [gd_scene format=3 uid="uid://b5mgtdynv3jll"]
 
-[ext_resource type="Script" uid="uid://belxfkw42bho3" path="res://scripts/terrarium.gd" id="1_ppgk2"]
 [ext_resource type="PackedScene" uid="uid://b6p54lc2uj87w" path="res://scenes/terrarium.tscn" id="3_mx8sn"]
 [ext_resource type="PackedScene" uid="uid://6wqir0wfchnk" path="res://scenes/grub.tscn" id="3_ppgk2"]
 [ext_resource type="PackedScene" uid="uid://j4q85tovy8sq" path="res://scenes/beetle.tscn" id="4_b121j"]
@@ -9,10 +8,19 @@
 [ext_resource type="PackedScene" uid="uid://nrtk8rhis24l" path="res://scenes/spawner.tscn" id="6_klq6b"]
 [ext_resource type="PackedScene" uid="uid://wfel0wd25yj" path="res://scenes/roach.tscn" id="6_olg7q"]
 [ext_resource type="PackedScene" uid="uid://bm2n6xi6wmph5" path="res://scenes/gecko.tscn" id="7_8c41q"]
+[ext_resource type="PackedScene" uid="uid://me75of34kr33" path="res://scenes/points_feedback.tscn" id="8_82cfe"]
 [ext_resource type="Script" uid="uid://dtfr3ncdqchml" path="res://scripts/HealthBar3D.gd" id="8_olg7q"]
+[ext_resource type="Script" uid="uid://c2skp18pd455y" path="res://scripts/environment_ui.gd" id="11_8gofh"]
 [ext_resource type="Theme" uid="uid://kyycrg3gq8ln" path="res://themes/button.tres" id="11_8iemx"]
 [ext_resource type="Script" uid="uid://bie8qs1ktld5o" path="res://scripts/lose_screen.gd" id="11_64w2a"]
 [ext_resource type="FontFile" uid="uid://dctrfdggugy2d" path="res://fonts/Super Waffles.ttf" id="11_t1rx8"]
+[ext_resource type="Texture2D" uid="uid://bev2hwii8lic8" path="res://images/Glossy Gold Star Coin Icon.png" id="12_8gofh"]
+[ext_resource type="StyleBox" uid="uid://im2sdqhh2jqc" path="res://themes/ui_counters.tres" id="12_gunhw"]
+[ext_resource type="Script" uid="uid://ddwnm6ahkb4jv" path="res://scripts/points_ui.gd" id="12_h6wmr"]
+[ext_resource type="Texture2D" uid="uid://dja065rae1gmx" path="res://images/water-drop-icon-png.png" id="12_wc255"]
+[ext_resource type="Script" uid="uid://jvfsb56gmqag" path="res://scripts/tool_tip_interact.gd" id="14_ux5qa"]
+[ext_resource type="PackedScene" uid="uid://c4yb4mko55vn8" path="res://scenes/tooltip.tscn" id="15_82cfe"]
+[ext_resource type="Texture2D" uid="uid://cvv0kr6jqy7sb" path="res://images/9806399.png" id="15_ux5qa"]
 
 [sub_resource type="Environment" id="Environment_1vivr"]
 
@@ -45,9 +53,7 @@ corner_radius_top_right = 30
 corner_radius_bottom_right = 30
 corner_radius_bottom_left = 30
 
-[node name="Level" type="Node3D" unique_id=89402164 node_paths=PackedStringArray("environment")]
-script = ExtResource("1_ppgk2")
-environment = NodePath("Terrarium/EnvironmentManager")
+[node name="Level" type="Node3D" unique_id=89402164]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=900064872]
 transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
@@ -99,11 +105,12 @@ spawn_count = 10
 spawn_interval = 1.0
 
 [node name="Gecko" parent="." unique_id=1937517286 node_paths=PackedStringArray("wander_bounds", "eat_area") instance=ExtResource("7_8c41q")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4862976, -0.010196209, 0.67551327)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4862976, -0.010195732, 0.67551327)
 SPEED = 2.0
 wander_bounds = NodePath("../Terrarium/CSGBox3D")
 roam_delay = 3.0
 eat_area = NodePath("Area3D")
+floating_feedback_scene = ExtResource("8_82cfe")
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="Gecko" unique_id=519854774]
 
@@ -144,9 +151,14 @@ target_object = NodePath("../Terrarium/CSGBox3D")
 spawn_count = 10
 spawn_interval = 1.0
 
-[node name="Terrarium" parent="." unique_id=1625053110 node_paths=PackedStringArray("gecko") instance=ExtResource("3_mx8sn")]
+[node name="Terrarium" parent="." unique_id=1625053110 node_paths=PackedStringArray("gecko", "environment") instance=ExtResource("3_mx8sn")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0047346354, 0.008702278, -0.19663143)
 gecko = NodePath("../Gecko")
+environment = NodePath("EnvironmentManager")
+
+[node name="EnvironmentManager" parent="Terrarium" index="2" unique_id=564750640]
+humidity_decay_min = 0.15
+humidity_decay_max = 0.3
 
 [node name="Node" type="Node" parent="." unique_id=2127695471 node_paths=PackedStringArray("countdown_timer", "countdown_label", "spawners")]
 script = ExtResource("4_mx8sn")
@@ -178,7 +190,144 @@ text = "3"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="H&T_UI" type="Control" parent="." unique_id=1951181948 node_paths=PackedStringArray("environment", "temperature_label", "humidity_label")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("11_8gofh")
+environment = NodePath("../Terrarium/EnvironmentManager")
+temperature_label = NodePath("PanelContainer3/Label")
+humidity_label = NodePath("PanelContainer2/Label2")
+
+[node name="CoinsIcon" type="TextureRect" parent="H&T_UI" unique_id=274913315]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 37.0
+offset_right = 78.0
+offset_bottom = 107.0
+texture = ExtResource("12_8gofh")
+expand_mode = 1
+
+[node name="PanelContainer3" type="PanelContainer" parent="H&T_UI" unique_id=227427119]
+layout_mode = 0
+offset_left = 908.0
+offset_top = 39.0
+offset_right = 1070.0
+offset_bottom = 109.0
+theme_override_styles/panel = ExtResource("12_gunhw")
+script = ExtResource("14_ux5qa")
+
+[node name="Label" type="Label" parent="H&T_UI/PanelContainer3" unique_id=514022713]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("11_t1rx8")
+theme_override_font_sizes/font_size = 57
+text = "35.5"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Tooltip" parent="H&T_UI/PanelContainer3" unique_id=1583022041 instance=ExtResource("15_82cfe")]
+visible = false
+layout_mode = 2
+
+[node name="RichTextLabel" parent="H&T_UI/PanelContainer3/Tooltip/MarginContainer" parent_id_path=PackedInt32Array(1583022041, 1780858801) index="0" unique_id=885056475]
+text = "[center][img=36x36]res://images/9806399.png[/img][font_size=22][b]
+[color=#F59A48]TEMPERATURE[/color][/b][/font_size][/center]
+[hr]
+[center][color=#B8C2CC]Controls the warmth inside your terrarium.[/color][/center]
+
+
+"
+
+[node name="Points2" type="PanelContainer" parent="H&T_UI" unique_id=1399931032 node_paths=PackedStringArray("gecko", "points_label")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.068
+anchor_top = 0.051000003
+anchor_right = 0.23
+anchor_bottom = 0.17
+offset_left = -0.33600616
+offset_top = -0.048000336
+offset_right = 0.040008545
+offset_bottom = -0.16000366
+theme_override_styles/panel = ExtResource("12_gunhw")
+script = ExtResource("12_h6wmr")
+gecko = NodePath("../../Gecko")
+points_label = NodePath("Label")
+
+[node name="Label" type="Label" parent="H&T_UI/Points2" unique_id=306842761]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("11_t1rx8")
+theme_override_font_sizes/font_size = 57
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Tooltip" parent="H&T_UI/Points2" unique_id=1094119375 instance=ExtResource("15_82cfe")]
+visible = false
+layout_mode = 2
+
+[node name="RichTextLabel" parent="H&T_UI/Points2/Tooltip/MarginContainer" parent_id_path=PackedInt32Array(1094119375, 1780858801) index="0" unique_id=885056475]
+text = "[font_size=22][b][color=#F5C451]FEEDING REWARDS[/color][/b][/font_size]
+[hr]
+[center][color=#B8C2CC]Feed your gecko to earn points and increase your score.[/color][/center]"
+horizontal_alignment = 1
+
+[node name="HumidityIcon" type="TextureRect" parent="H&T_UI" unique_id=555847160]
+layout_mode = 0
+offset_left = 830.0
+offset_top = 132.0
+offset_right = 906.0
+offset_bottom = 202.0
+texture = ExtResource("12_wc255")
+expand_mode = 1
+
+[node name="TemperatureIcon" type="TextureRect" parent="H&T_UI" unique_id=521394628]
+layout_mode = 0
+offset_left = 830.0
+offset_top = 40.0
+offset_right = 906.0
+offset_bottom = 110.0
+texture = ExtResource("15_ux5qa")
+expand_mode = 1
+
+[node name="PanelContainer2" type="PanelContainer" parent="H&T_UI" unique_id=2130612946]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -244.0
+offset_top = 132.0
+offset_right = -82.0
+offset_bottom = 202.0
+grow_horizontal = 0
+theme_override_styles/panel = ExtResource("12_gunhw")
+script = ExtResource("14_ux5qa")
+
+[node name="Label2" type="Label" parent="H&T_UI/PanelContainer2" unique_id=1871790823]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("11_t1rx8")
+theme_override_font_sizes/font_size = 57
+text = "40%"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Tooltip" parent="H&T_UI/PanelContainer2" unique_id=343033735 instance=ExtResource("15_82cfe")]
+visible = false
+layout_mode = 2
+
+[node name="RichTextLabel" parent="H&T_UI/PanelContainer2/Tooltip/MarginContainer" parent_id_path=PackedInt32Array(343033735, 1780858801) index="0" unique_id=885056475]
+text = "[center][img=36x36]res://images/water-drop-icon-png.png[/img]
+[font_size=22][b][color=#55B8F0]HUMIDITY[/color][/b][/font_size][/center]
+[hr]
+[center][color=#B8C2CC]Controls the amount of moisture in the terrarium's air.[/color][/center]
+
+"
+
 [node name="LoseScreen" type="Control" parent="." unique_id=1192377682 node_paths=PackedStringArray("gecko")]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -236,3 +385,6 @@ vertical_alignment = 1
 
 [editable path="Terrarium"]
 [editable path="Terrarium/M_Terrarium"]
+[editable path="H&T_UI/PanelContainer3/Tooltip"]
+[editable path="H&T_UI/Points2/Tooltip"]
+[editable path="H&T_UI/PanelContainer2/Tooltip"]

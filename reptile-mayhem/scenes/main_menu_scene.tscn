@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://ds4vu0sanlswx"]
 
 [ext_resource type="PackedScene" uid="uid://cfut2skymw6nc" path="res://scenes/main_menu_UI.tscn" id="1_xhf6x"]
-[ext_resource type="PackedScene" uid="uid://ci6k26ubotqkj" path="res://scenes/level_test.tscn" id="2_vfskp"]
+[ext_resource type="PackedScene" uid="uid://b5mgtdynv3jll" path="res://scenes/level.tscn" id="2_vfskp"]
 
 [node name="MainMenuScene" type="Node3D" unique_id=239696934]
 

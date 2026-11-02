@@ -23,6 +23,10 @@ var has_died: bool = false
 				current_health, 0.0, species_data.max_health
 			)
 
+@export_group("Points Feedback")
+@export var floating_feedback_scene: PackedScene
+@export var feedback_height: float = 0.3
+
 @onready var nav_agent: NavigationAgent3D = _find_navigation_agent(self)
 
 func _find_navigation_agent(node: Node) -> NavigationAgent3D:
@@ -44,6 +48,9 @@ var rng := RandomNumberGenerator.new()
 var has_target: bool = false
 var choosing_target: bool = false
 var is_waiting_to_roam: bool = false
+
+var environmental_damage_timer: float = 0.0
+var environmental_damage_accumulated: float = 0.0
 
 
 func _ready() -> void:
@@ -232,6 +239,7 @@ func choose_random_destination() -> void:
 
 
 ## Feed the gecko a food item.
+
 func feed(food: FoodItem) -> void:
 	if food == null or food.is_consumed() or not is_alive():
 		return
@@ -241,56 +249,89 @@ func feed(food: FoodItem) -> void:
 		food.consume()
 		return
 
+	# Remember where the bug was before it gets removed.
+	var bug_position: Vector3 = food.global_position
+
 	if species_data.is_food_accepted(food.food_type):
-		current_points += points_per_correct_food
+		# CORRECT FOOD
+		var reward: int = points_per_correct_food
+
+		current_points += reward
 		points_changed.emit(current_points)
 
-		print(
-			"Correct food! +",
-			points_per_correct_food,
-			" points. Total: ",
-			current_points
+		# Display green +points.
+		spawn_floating_feedback(
+			bug_position,
+			"+%d" % reward,
+			Color("#42E879"),
+			false
 		)
+
+		print("Correct food! +", reward, " points.")
+
 	else:
-		take_damage(species_data.incorrect_food_damage)
+		# INCORRECT FOOD
+		var damage: float = species_data.incorrect_food_damage
 
-		print(
-			"Incorrect food! Gecko lost ",
-			species_data.incorrect_food_damage,
-			" health."
+		take_damage(damage)
+
+		# Display red -health with HP icon.
+		spawn_floating_feedback(
+			bug_position,
+			"-%.0f" % damage,
+			Color("#F05B62"),
+			true
 		)
 
+		print("Incorrect food! Gecko lost ", damage, " health.")
+
+	# Consume the bug after spawning the feedback.
 	food.consume()
 
 
-func process_environment(
-	current_temp: float,
-	current_humidity: float,
-	delta: float
-) -> void:
+
+func process_environment(damage_rate: float, delta: float) -> void:
 	if species_data == null or not is_alive():
 		return
 
-	var temp_out_of_range: bool = not species_data.is_temperature_ideal(
-		current_temp
+	if damage_rate <= 0.0:
+		return
+
+	# Calculate actual damage per second.
+	var actual_damage_rate: float = (
+		damage_rate * species_data.env_damage_rate
 	)
-	var humidity_out_of_range: bool = not species_data.is_humidity_ideal(
-		current_humidity
-	)
 
-	if temp_out_of_range or humidity_out_of_range:
-		take_damage(species_data.env_damage_rate * delta)
+	var damage: float = actual_damage_rate * delta
 
+	# Remember how much damage is actually applied.
+	var health_before: float = current_health
 
-func evaluate_prop_multiplier(prop: Prop) -> float:
-	if prop == null or species_data == null:
-		return 0.0
+	take_damage(damage)
 
-	if prop.biome == species_data.preferred_biome:
-		return prop.score_multiplier_delta
+	var actual_damage: float = minf(damage, health_before)
 
-	return 0.0
+	environmental_damage_accumulated += actual_damage
+	environmental_damage_timer += delta
 
+	# Print once per second, or immediately when the gecko dies.
+	if environmental_damage_timer >= 1.0 or not is_alive():
+
+		var average_damage_rate: float = (
+			environmental_damage_accumulated
+			/ environmental_damage_timer
+		)
+
+		print(
+			"ENVIRONMENTAL DAMAGE: ",
+			"Lost %.2f HP | " % environmental_damage_accumulated,
+			"Rate: %.2f HP/s | " % average_damage_rate,
+			"Remaining HP: %.2f" % current_health
+		)
+
+		# Reset the log counters.
+		environmental_damage_timer = 0.0
+		environmental_damage_accumulated = 0.0
 
 func is_alive() -> bool:
 	return current_health > 0.0
@@ -316,3 +357,34 @@ func take_damage(amount: float) -> void:
 
 func _take_damage(amount: float) -> void:
 	take_damage(amount)
+
+func spawn_floating_feedback(
+	world_position: Vector3,
+	message: String,
+	text_color: Color,
+	show_hp_icon: bool = false
+) -> void:
+	if floating_feedback_scene == null:
+		push_warning("Floating feedback scene is not assigned.")
+		return
+
+	var feedback := floating_feedback_scene.instantiate() as FloatingFeedback
+
+	if feedback == null:
+		push_warning("Could not instantiate FloatingFeedback.")
+		return
+
+	# Add it to the level, NOT to the gecko.
+	var scene_root := get_tree().current_scene
+
+	if scene_root == null:
+		feedback.queue_free()
+		return
+
+	scene_root.add_child(feedback)
+
+	# Place it at the bug's original world position.
+	feedback.global_position = world_position + Vector3.UP * feedback_height
+
+	# Start its animation.
+	feedback.play(message, text_color, show_hp_icon)
