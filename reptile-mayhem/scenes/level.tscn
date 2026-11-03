@@ -157,8 +157,10 @@ gecko = NodePath("../Gecko")
 environment = NodePath("EnvironmentManager")
 
 [node name="EnvironmentManager" parent="Terrarium" index="2" unique_id=564750640]
-humidity_decay_min = 0.15
-humidity_decay_max = 0.3
+temp_decay_min = 1.0
+temp_decay_max = 1.0
+humidity_decay_min = 1.0
+humidity_decay_max = 1.0
 
 [node name="Node" type="Node" parent="." unique_id=2127695471 node_paths=PackedStringArray("countdown_timer", "countdown_label", "spawners")]
 script = ExtResource("4_mx8sn")
@@ -258,13 +260,6 @@ script = ExtResource("12_h6wmr")
 gecko = NodePath("../../Gecko")
 points_label = NodePath("Label")
 
-[node name="Label" type="Label" parent="H&T_UI/Points2" unique_id=306842761]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("11_t1rx8")
-theme_override_font_sizes/font_size = 57
-horizontal_alignment = 1
-vertical_alignment = 1
-
 [node name="Tooltip" parent="H&T_UI/Points2" unique_id=1094119375 instance=ExtResource("15_82cfe")]
 visible = false
 layout_mode = 2
@@ -274,6 +269,14 @@ text = "[font_size=22][b][color=#F5C451]FEEDING REWARDS[/color][/b][/font_size]
 [hr]
 [center][color=#B8C2CC]Feed your gecko to earn points and increase your score.[/color][/center]"
 horizontal_alignment = 1
+
+[node name="Label" type="Label" parent="H&T_UI/Points2" unique_id=306842761]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("11_t1rx8")
+theme_override_font_sizes/font_size = 57
+text = "2333"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="HumidityIcon" type="TextureRect" parent="H&T_UI" unique_id=555847160]
 layout_mode = 0
