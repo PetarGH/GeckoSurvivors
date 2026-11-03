@@ -36,7 +36,7 @@ vertices_per_polygon = 8.0
 radius = 2.5113063
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8c41q"]
-bg_color = Color(1, 0, 0.10980392, 1)
+bg_color = Color(0, 0, 0, 1)
 border_width_top = 4
 border_width_right = 4
 border_width_bottom = 4
@@ -158,8 +158,9 @@ gecko = NodePath("../Gecko")
 environment = NodePath("EnvironmentManager")
 
 [node name="EnvironmentManager" parent="Terrarium" index="2" unique_id=564750640]
+temp_decay_max = 0.2
 humidity_decay_min = 0.15
-humidity_decay_max = 0.3
+humidity_decay_max = 0.25
 
 [node name="Node" type="Node" parent="." unique_id=2127695471 node_paths=PackedStringArray("countdown_timer", "countdown_label", "spawners")]
 script = ExtResource("4_mx8sn")
@@ -203,15 +204,6 @@ script = ExtResource("11_8gofh")
 environment = NodePath("../Terrarium/EnvironmentManager")
 temperature_label = NodePath("PanelContainer3/Label")
 humidity_label = NodePath("PanelContainer2/Label2")
-
-[node name="CoinsIcon" type="TextureRect" parent="H&T_UI" unique_id=274913315]
-layout_mode = 0
-offset_left = 2.0
-offset_top = 37.0
-offset_right = 78.0
-offset_bottom = 107.0
-texture = ExtResource("12_8gofh")
-expand_mode = 1
 
 [node name="PanelContainer3" type="PanelContainer" parent="H&T_UI" unique_id=227427119]
 layout_mode = 0
@@ -259,13 +251,6 @@ script = ExtResource("12_h6wmr")
 gecko = NodePath("../../Gecko")
 points_label = NodePath("Label")
 
-[node name="Label" type="Label" parent="H&T_UI/Points2" unique_id=306842761]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("11_t1rx8")
-theme_override_font_sizes/font_size = 57
-horizontal_alignment = 1
-vertical_alignment = 1
-
 [node name="Tooltip" parent="H&T_UI/Points2" unique_id=1094119375 instance=ExtResource("15_82cfe")]
 visible = false
 layout_mode = 2
@@ -276,23 +261,13 @@ text = "[font_size=22][b][color=#F5C451]FEEDING REWARDS[/color][/b][/font_size]
 [center][color=#B8C2CC]Feed your gecko to earn points and increase your score.[/color][/center]"
 horizontal_alignment = 1
 
-[node name="HumidityIcon" type="TextureRect" parent="H&T_UI" unique_id=555847160]
-layout_mode = 0
-offset_left = 830.0
-offset_top = 132.0
-offset_right = 906.0
-offset_bottom = 202.0
-texture = ExtResource("12_wc255")
-expand_mode = 1
-
-[node name="TemperatureIcon" type="TextureRect" parent="H&T_UI" unique_id=521394628]
-layout_mode = 0
-offset_left = 830.0
-offset_top = 40.0
-offset_right = 906.0
-offset_bottom = 110.0
-texture = ExtResource("15_ux5qa")
-expand_mode = 1
+[node name="Label" type="Label" parent="H&T_UI/Points2" unique_id=306842761]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("11_t1rx8")
+theme_override_font_sizes/font_size = 57
+text = "2333"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="PanelContainer2" type="PanelContainer" parent="H&T_UI" unique_id=2130612946]
 layout_mode = 1
@@ -302,7 +277,7 @@ anchor_right = 1.0
 offset_left = -244.0
 offset_top = 132.0
 offset_right = -82.0
-offset_bottom = 202.0
+offset_bottom = 203.0
 grow_horizontal = 0
 theme_override_styles/panel = ExtResource("12_gunhw")
 script = ExtResource("14_ux5qa")
@@ -326,6 +301,33 @@ text = "[center][img=36x36]res://images/water-drop-icon-png.png[/img]
 [center][color=#B8C2CC]Controls the amount of moisture in the terrarium's air.[/color][/center]
 
 "
+
+[node name="HumidityIcon" type="TextureRect" parent="H&T_UI" unique_id=555847160]
+layout_mode = 0
+offset_left = 830.0
+offset_top = 132.0
+offset_right = 906.0
+offset_bottom = 202.0
+texture = ExtResource("12_wc255")
+expand_mode = 1
+
+[node name="CoinsIcon" type="TextureRect" parent="H&T_UI" unique_id=274913315]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 37.0
+offset_right = 78.0
+offset_bottom = 107.0
+texture = ExtResource("12_8gofh")
+expand_mode = 1
+
+[node name="TemperatureIcon" type="TextureRect" parent="H&T_UI" unique_id=521394628]
+layout_mode = 0
+offset_left = 830.0
+offset_top = 40.0
+offset_right = 906.0
+offset_bottom = 110.0
+texture = ExtResource("15_ux5qa")
+expand_mode = 1
 
 [node name="DebugControls" type="VBoxContainer" parent="." unique_id=1739284416 node_paths=PackedStringArray("environment", "gecko")]
 visible = false

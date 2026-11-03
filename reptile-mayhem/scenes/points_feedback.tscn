@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bhyrh65hgg5ht" path="res://scripts/points_feedback.gd" id="1_355ex"]
 [ext_resource type="FontFile" uid="uid://dctrfdggugy2d" path="res://fonts/Super Waffles.ttf" id="1_p11d5"]
-[ext_resource type="Texture2D" uid="uid://chgp5s8e15l4l" path="res://images/Bright Red Heart Icon.png" id="2_355ex"]
+[ext_resource type="Texture2D" uid="uid://b8vi13xigacaa" path="res://images/Glowing_Purple_Poison_Skull_Icon-removebg-preview.png" id="3_355ex"]
 
 [node name="PointsFeedback" type="Node3D" unique_id=1077221792]
 script = ExtResource("1_355ex")
@@ -15,7 +15,6 @@ font_size = 64
 outline_size = 8
 
 [node name="HPIcon" type="Sprite3D" parent="." unique_id=2123460662]
-transform = Transform3D(0.0718635, 0, 0, 0, 0.0718635, 0, 0, 0, 0.0718635, 0.020407677, 0, 0)
-visible = false
+transform = Transform3D(0.2809756, 0, 0, 0, 0.3095441, 0, 0, 0, 0.32500255, 0.020407677, 0.01876694, -0.036985874)
 billboard = 1
-texture = ExtResource("2_355ex")
+texture = ExtResource("3_355ex")
