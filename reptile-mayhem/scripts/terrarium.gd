@@ -5,6 +5,10 @@ extends Node3D
 
 const BASE_SCORE_MULTIPLIER: float = 1.0
 
+signal time_elapsed(delta: float)
+signal bad_temperature_time(delta: float)
+signal bad_moisture_time(delta: float)
+
 @export_group("Environment")
 @export var gecko: Gecko
 @export var environment: EnvironmentManager
@@ -30,6 +34,7 @@ func _ready() -> void:
 
 	# Preserve existing food and prop registration.
 	child_entered_tree.connect(_on_child_entered_tree)
+	_hook_run_stats()
 
 	for child: Node in get_children():
 		_register_child(child)
@@ -116,6 +121,14 @@ func _process(delta: float) -> void:
 	if not gecko.is_alive():
 		return
 
+	time_elapsed.emit(delta)
+
+	if environment.get_temperature_severity() > 0:
+		bad_temperature_time.emit(delta)
+
+	if environment.get_humidity_severity() > 0:
+		bad_moisture_time.emit(delta)
+
 	# Calculate damage based on temperature and humidity severity.
 	var damage_rate: float = environment.get_environment_damage_rate()
 
@@ -124,3 +137,16 @@ func _process(delta: float) -> void:
 
 func _on_prop_tree_exited(prop: Prop) -> void:
 	active_props.erase(prop)
+
+
+## Clears the previous run and connects this habitat's signals to the stat registry.
+func _hook_run_stats() -> void:
+	RunStats.reset()
+
+	if gecko != null:
+		RunStats.hook_count(gecko.good_food_eaten, &"good_food")
+		RunStats.hook_count(gecko.bad_food_eaten, &"bad_food")
+
+	RunStats.hook_amount(time_elapsed, &"total_time")
+	RunStats.hook_amount(bad_temperature_time, &"bad_temp_time")
+	RunStats.hook_amount(bad_moisture_time, &"bad_moisture_time")

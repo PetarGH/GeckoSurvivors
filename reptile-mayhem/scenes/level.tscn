@@ -13,6 +13,7 @@
 [ext_resource type="Script" uid="uid://c2skp18pd455y" path="res://scripts/environment_ui.gd" id="11_8gofh"]
 [ext_resource type="Theme" uid="uid://kyycrg3gq8ln" path="res://themes/button.tres" id="11_8iemx"]
 [ext_resource type="Script" uid="uid://bie8qs1ktld5o" path="res://scripts/lose_screen.gd" id="11_64w2a"]
+[ext_resource type="Script" uid="uid://c66b8uklexoje" path="res://scripts/debug_controls.gd" id="16_debug"]
 [ext_resource type="FontFile" uid="uid://dctrfdggugy2d" path="res://fonts/Super Waffles.ttf" id="11_t1rx8"]
 [ext_resource type="Texture2D" uid="uid://bev2hwii8lic8" path="res://images/Glossy Gold Star Coin Icon.png" id="12_8gofh"]
 [ext_resource type="StyleBox" uid="uid://im2sdqhh2jqc" path="res://themes/ui_counters.tres" id="12_gunhw"]
@@ -325,6 +326,36 @@ text = "[center][img=36x36]res://images/water-drop-icon-png.png[/img]
 [center][color=#B8C2CC]Controls the amount of moisture in the terrarium's air.[/color][/center]
 
 "
+
+[node name="DebugControls" type="VBoxContainer" parent="." unique_id=1739284416 node_paths=PackedStringArray("environment", "gecko")]
+visible = false
+offset_left = 24.0
+offset_top = 180.0
+offset_right = 304.0
+offset_bottom = 460.0
+mouse_filter = 2
+theme = ExtResource("11_8iemx")
+theme_override_constants/separation = 12
+theme_override_fonts/font = ExtResource("11_t1rx8")
+theme_override_font_sizes/font_size = 28
+script = ExtResource("16_debug")
+environment = NodePath("../Terrarium/EnvironmentManager")
+gecko = NodePath("../Gecko")
+
+[node name="TempButton" type="Button" parent="DebugControls" unique_id=1739284417]
+layout_mode = 2
+custom_minimum_size = Vector2(260, 72)
+text = "Temp -10"
+
+[node name="MoistureButton" type="Button" parent="DebugControls" unique_id=1739284418]
+layout_mode = 2
+custom_minimum_size = Vector2(260, 72)
+text = "Moisture -10"
+
+[node name="KillButton" type="Button" parent="DebugControls" unique_id=1739284419]
+layout_mode = 2
+custom_minimum_size = Vector2(260, 72)
+text = "Kill Gecko"
 
 [node name="LoseScreen" type="Control" parent="." unique_id=1192377682 node_paths=PackedStringArray("gecko")]
 visible = false
