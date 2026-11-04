@@ -16,7 +16,7 @@ fill_from = Vector2(0.49798387, 0.51008064)
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8vrlf"]
 texture = SubResource("GradientTexture2D_qbdty")
 
-[node name="MainMenuUI" type="Control" unique_id=7696687]
+[node name="MainMenuUI" type="Control" unique_id=7696687 node_paths=PackedStringArray("debug_button")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -25,6 +25,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_nqyyv")
 next_scene = ExtResource("2_c5p7l")
+debug_button = NodePath("DebugButton")
 
 [node name="Panel" type="Panel" parent="." unique_id=931852066]
 layout_mode = 1
@@ -83,6 +84,22 @@ theme_override_font_sizes/font_size = 102
 text = "REPTILE MAYHEM"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="DebugButton" type="Button" parent="." unique_id=1847263511]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = -92.0
+offset_right = 340.0
+offset_bottom = -16.0
+grow_vertical = 0
+theme = ExtResource("3_c5p7l")
+theme_override_fonts/font = ExtResource("4_c5p7l")
+theme_override_font_sizes/font_size = 36
+toggle_mode = true
+text = "Debug: Off"
 
 [connection signal="pressed" from="PlayButton" to="." method="_on_play_button_pressed"]
 [connection signal="pressed" from="ExitButton" to="." method="_on_exit_button_pressed"]

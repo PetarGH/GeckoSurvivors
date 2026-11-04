@@ -6,6 +6,8 @@ extends CharacterBody3D
 signal health_depleted()
 signal health_changed(new_health: float)
 signal points_changed(new_points: int)
+signal good_food_eaten
+signal bad_food_eaten
 var has_died: bool = false
 
 @export var SPEED: float = 5.0
@@ -254,6 +256,7 @@ func feed(food: FoodItem) -> void:
 
 	if species_data.is_food_accepted(food.food_type):
 		# CORRECT FOOD
+		good_food_eaten.emit()
 		var reward: int = points_per_correct_food
 
 		current_points += reward
@@ -271,6 +274,7 @@ func feed(food: FoodItem) -> void:
 
 	else:
 		# INCORRECT FOOD
+		bad_food_eaten.emit()
 		var damage: float = species_data.incorrect_food_damage
 
 		take_damage(damage)
