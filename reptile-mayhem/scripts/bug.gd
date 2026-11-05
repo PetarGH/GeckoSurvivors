@@ -35,6 +35,11 @@ var is_dying := false
 func _ready() -> void:
 	rng.randomize()
 
+	# Keep bugs on the ground and off of each other's physics bodies.
+	floor_snap_length = 0.3
+	collision_layer = 2
+	collision_mask = 1
+
 	if animation_player != null:
 		animation_player.animation_finished.connect(_on_animation_finished)
 
