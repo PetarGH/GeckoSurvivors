@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://b5mgtdynv3jll"]
 
 [ext_resource type="PackedScene" uid="uid://b6p54lc2uj87w" path="res://scenes/terrarium.tscn" id="3_mx8sn"]
-[ext_resource type="PackedScene" uid="uid://6wqir0wfchnk" path="res://scenes/grub.tscn" id="3_ppgk2"]
-[ext_resource type="PackedScene" uid="uid://j4q85tovy8sq" path="res://scenes/beetle.tscn" id="4_b121j"]
+[ext_resource type="PackedScene" uid="uid://6wqir0wfchnk" path="res://scenes/superworm.tscn" id="3_ppgk2"]
+[ext_resource type="PackedScene" uid="uid://j4q85tovy8sq" path="res://scenes/firefly.tscn" id="4_b121j"]
 [ext_resource type="Script" uid="uid://b0jorqba6lm6" path="res://scripts/StartGame.gd" id="4_mx8sn"]
 [ext_resource type="PackedScene" uid="uid://dydr7rfm1h8nx" path="res://scenes/cricket.tscn" id="5_8c41q"]
 [ext_resource type="PackedScene" uid="uid://nrtk8rhis24l" path="res://scenes/spawner.tscn" id="6_klq6b"]

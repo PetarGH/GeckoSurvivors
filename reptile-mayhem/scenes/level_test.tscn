@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://belxfkw42bho3" path="res://scripts/terrarium.gd" id="1_w0l5l"]
 [ext_resource type="PackedScene" uid="uid://nrtk8rhis24l" path="res://scenes/spawner.tscn" id="2_e0wnd"]
-[ext_resource type="PackedScene" uid="uid://6wqir0wfchnk" path="res://scenes/grub.tscn" id="3_n44uc"]
-[ext_resource type="PackedScene" uid="uid://j4q85tovy8sq" path="res://scenes/beetle.tscn" id="4_nuslc"]
+[ext_resource type="PackedScene" uid="uid://6wqir0wfchnk" path="res://scenes/superworm.tscn" id="3_n44uc"]
+[ext_resource type="PackedScene" uid="uid://j4q85tovy8sq" path="res://scenes/firefly.tscn" id="4_nuslc"]
 [ext_resource type="PackedScene" uid="uid://dydr7rfm1h8nx" path="res://scenes/cricket.tscn" id="5_re6lg"]
 [ext_resource type="PackedScene" uid="uid://wfel0wd25yj" path="res://scenes/roach.tscn" id="6_1pn8n"]
 [ext_resource type="PackedScene" uid="uid://bm2n6xi6wmph5" path="res://scenes/gecko.tscn" id="7_vnuhc"]
