@@ -58,20 +58,19 @@ func _physics_process(delta: float) -> void:
 	_update_walk_animation()
 
 
-## Moves the bug towards its wander target, or stops it once it reached the
-## terrarium bounds and is waiting for the gecko.
+## Moves the bug towards its wander target. Once it enters the terrarium
+## bounds it lets the gecko know food is waiting, but keeps roaming inside.
 func _walk(delta: float) -> void:
-	if is_dying or has_reached_bounds:
-		# The bug bumped into the terrarium and waits for the gecko.
+	if is_dying:
 		velocity.x = 0.0
 		velocity.z = 0.0
 		move_and_slide()
 		return
 
-	if _is_inside_wander_bounds():
+	# A bug that has entered the terrarium is fair game for the gecko, but it
+	# keeps roaming instead of standing still.
+	if _is_inside_wander_bounds() and not has_reached_bounds:
 		_reach_terrarium_bounds()
-		move_and_slide()
-		return
 
 	if wander_bounds == null or not has_target:
 		velocity.x = 0.0
@@ -206,10 +205,9 @@ func _is_inside_wander_bounds() -> bool:
 	)
 
 
-## Stops the bug at the terrarium bounds and lets the gecko know food is waiting.
+## Lets the gecko know food is waiting inside the terrarium bounds.
 func _reach_terrarium_bounds() -> void:
 	has_reached_bounds = true
-	velocity = Vector3.ZERO
 
 	if food_item != null:
 		food_item.notify_hit_terrarium_bounds()

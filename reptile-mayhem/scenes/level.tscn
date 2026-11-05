@@ -118,6 +118,7 @@ floating_feedback_scene = ExtResource("8_82cfe")
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="Gecko" unique_id=519854774]
 
 [node name="Area3D" type="Area3D" parent="Gecko" unique_id=1363527058]
+input_ray_pickable = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Gecko/Area3D" unique_id=1067648084]
 shape = SubResource("SphereShape3D_1vivr")
