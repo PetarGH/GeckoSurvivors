@@ -26,6 +26,12 @@ func consume() -> void:
 	get_parent().queue_free()
 
 
+## Marks this food as consumed without removing it from the scene, so a bug that
+## is playing its death animation is no longer hunted or eaten.
+func mark_consumed() -> void:
+	_is_consumed = true
+
+
 ## Returns true if this food item has already been consumed.
 func is_consumed() -> bool:
 	return _is_consumed

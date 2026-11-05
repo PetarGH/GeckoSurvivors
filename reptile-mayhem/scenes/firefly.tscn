@@ -1,165 +1,99 @@
 [gd_scene format=3 uid="uid://j4q85tovy8sq"]
 
 [ext_resource type="PackedScene" uid="uid://gbsy8ar0siwr" path="res://scenes/food_item.tscn" id="1_k4n6k"]
-
-[sub_resource type="GDScript" id="GDScript_c74hx"]
-script/source = "extends CharacterBody3D
-
-@export var SPEED: float = 5.0
-@export var wander_bounds: CSGBox3D
-
-@onready var nav_agent: NavigationAgent3D = $NavigationAgent3D
-@onready var food_item: FoodItem = $FoodItem
-
-var rng := RandomNumberGenerator.new()
-var has_target := false
-var choosing_target := false
-var has_reached_bounds := false
-
-
-func _ready() -> void:
-	rng.randomize()
-
-
-func set_wander_target(target: CSGBox3D) -> void:
-	wander_bounds = target
-	has_target = false
-	choose_random_destination()
-
-
-func _physics_process(delta: float) -> void:
-	if not is_on_floor():
-		velocity += get_gravity() * delta
-
-	if not has_reached_bounds and _is_inside_wander_bounds():
-		_reach_terrarium_bounds()
-
-	if has_reached_bounds:
-		# The bug bumped into the terrarium and waits for the gecko.
-		velocity.x = 0.0
-		velocity.z = 0.0
-		move_and_slide()
-		return
-
-	if wander_bounds == null or not has_target:
-		velocity.x = 0.0
-		velocity.z = 0.0
-		move_and_slide()
-		return
-
-	if nav_agent.is_navigation_finished():
-		choose_random_destination()
-
-		velocity.x = 0.0
-		velocity.z = 0.0
-		move_and_slide()
-		return
-
-	var next_position := nav_agent.get_next_path_position()
-	var direction := global_position.direction_to(next_position)
-
-	direction.y = 0.0
-	direction = direction.normalized()
-
-	velocity.x = direction.x * SPEED
-	velocity.z = direction.z * SPEED
-
-	move_and_slide()
-
-
-func choose_random_destination() -> void:
-	if wander_bounds == null or choosing_target:
-		return
-
-	choosing_target = true
-	has_target = false
-
-	var map := nav_agent.get_navigation_map()
-
-	# Wait for Godot to synchronize the navigation map.
-	for i in range(10):
-		await get_tree().physics_frame
-
-		if NavigationServer3D.map_get_iteration_id(map) > 0:
-			break
-
-	if NavigationServer3D.map_get_iteration_id(map) == 0:
-		choosing_target = false
-		push_warning(\"Navigation map is still not ready.\")
-		return
-
-	if not is_instance_valid(wander_bounds):
-		choosing_target = false
-		return
-
-	# Choose a random point inside the CSGBox3D bounds.
-	var size: Vector3 = wander_bounds.size
-
-	var random_point := Vector3(
-		rng.randf_range(-size.x / 2.0, size.x / 2.0),
-		0.0,
-		rng.randf_range(-size.z / 2.0, size.z / 2.0)
-	)
-
-	var world_point := wander_bounds.to_global(random_point)
-
-	# Snap the point onto the walkable navigation mesh.
-	var destination := NavigationServer3D.map_get_closest_point(
-		map,
-		world_point
-	)
-
-	nav_agent.target_position = destination
-
-	# Give the navigation agent a physics frame to calculate its path.
-	await get_tree().physics_frame
-
-	has_target = true
-	choosing_target = false
-
-## Returns true while the bug is inside the bounds of the terrarium.
-func _is_inside_wander_bounds() -> bool:
-	if wander_bounds == null:
-		return false
-
-	var local_position: Vector3 = wander_bounds.to_local(global_position)
-	var half_size: Vector3 = wander_bounds.size * 0.5
-
-	return (
-		absf(local_position.x) <= half_size.x
-		and absf(local_position.z) <= half_size.z
-	)
-
-
-## Stops the bug at the terrarium bounds and lets the gecko know food is waiting.
-func _reach_terrarium_bounds() -> void:
-	has_reached_bounds = true
-	velocity = Vector3.ZERO
-
-	if food_item != null:
-		food_item.notify_hit_terrarium_bounds()
-
-
-func die() -> void:
-	queue_free()
-
-
-func _on_food_item_input_event(camera: Node, event: InputEvent, event_position: Vector3, normal: Vector3, shape_idx: int) -> void:
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			print(\"Grub clicked!\")
-			die()
-"
+[ext_resource type="Script" uid="uid://dfd0eyky1sll3" path="res://scripts/bug.gd" id="2_bug"]
+[ext_resource type="PackedScene" uid="uid://b3j7rkp5kthik" path="res://meshes/M_Firefly.glb" id="3_mesh"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_c74hx"]
 radius = 0.51
 
-[sub_resource type="SphereMesh" id="SphereMesh_1vivr"]
+[sub_resource type="Animation" id="Animation_die"]
+resource_name = "Die"
+length = 0.7
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visual:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.4, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0.25, 0, 0.12), Vector3(-1.1, 0, 0.25), Vector3(-1.35, 0, 0.3)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visual:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.4, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0.1, 0), Vector3(0, 0.28, 0), Vector3(0, 0.22, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_vanish"]
+resource_name = "Vanish"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visual:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.35, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(1, 1, 1), Vector3(0.8, 0.8, 0.8), Vector3(0.3, 0.3, 0.3), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_walk"]
+resource_name = "Walk"
+length = 0.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visual:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0.05, 0), Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visual:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.125, 0.25, 0.375, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0.12), Vector3(0, 0, 0), Vector3(0, 0, -0.12), Vector3(0, 0, 0), Vector3(0, 0, 0.12)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_bug"]
+_data = {
+&"Die": SubResource("Animation_die"),
+&"Vanish": SubResource("Animation_vanish"),
+&"Walk": SubResource("Animation_walk")
+}
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_8vrlf"]
 
 [node name="Firefly" type="CharacterBody3D" unique_id=1633903147]
-script = SubResource("GDScript_c74hx")
+collision_layer = 2
+collision_mask = 1
+floor_snap_length = 0.3
+script = ExtResource("2_bug")
 
 [node name="FoodItem" parent="." unique_id=865895106 instance=ExtResource("1_k4n6k")]
 food_type = 3
@@ -169,10 +103,12 @@ shape = SubResource("SphereShape3D_c74hx")
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=2132024037]
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=88537160]
-transform = Transform3D(1, 0, 0, 0, 1.7057943, 0, 0, 0, 1, 0, 0, 0)
-layers = 4097
-mesh = SubResource("SphereMesh_1vivr")
+[node name="Visual" type="Node3D" parent="." unique_id=43089299]
+
+[node name="M_Firefly" parent="Visual" unique_id=2071675281 instance=ExtResource("3_mesh")]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=222871187]
+libraries/ = SubResource("AnimationLibrary_bug")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1204472865]
 shape = SubResource("SphereShape3D_8vrlf")

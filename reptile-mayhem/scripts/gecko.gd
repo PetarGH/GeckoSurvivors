@@ -266,17 +266,23 @@ func _physics_process(delta: float) -> void:
 
 ## Turns the gecko towards [param target_position] and walks there at [param speed].
 func _move_towards(target_position: Vector3, delta: float, speed: float) -> void:
-	var direction: Vector3 = global_position.direction_to(target_position)
-
-	direction.y = 0.0
-	direction = direction.normalized()
-
-	if direction.length_squared() < 0.0001:
+	# Navigation can occasionally return a bad point; never apply a non-finite transform.
+	if not target_position.is_finite() or not global_position.is_finite():
 		velocity.x = 0.0
 		velocity.z = 0.0
 		move_and_slide()
 		return
-	
+
+	var direction: Vector3 = global_position.direction_to(target_position)
+	direction.y = 0.0
+
+	if not direction.is_finite() or direction.length_squared() < 0.0001:
+		velocity.x = 0.0
+		velocity.z = 0.0
+		move_and_slide()
+		return
+
+	direction = direction.normalized()
 	var target_yaw: float = atan2(direction.x, direction.z)
 	global_rotation.y = rotate_toward(
 		global_rotation.y,
