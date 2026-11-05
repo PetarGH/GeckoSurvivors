@@ -16,6 +16,7 @@ var has_died: bool = false
 @export var points_per_correct_food: int = 10
 @export var turn_speed_degrees: float =	 180.0
 @export var eat_area: Area3D
+@export var eat_distance: float = 1.5
 
 @export var species_data: GeckoSpeciesData:
 	set(value):
@@ -51,11 +52,15 @@ var has_target: bool = false
 var choosing_target: bool = false
 var is_waiting_to_roam: bool = false
 
+var hunt_target: FoodItem = null
+var hunt_queue: Array[FoodItem] = []
+
 var environmental_damage_timer: float = 0.0
 var environmental_damage_accumulated: float = 0.0
 
 
 func _ready() -> void:
+	add_to_group(&"gecko")
 	rng.randomize()
 
 	if species_data != null:
@@ -93,14 +98,84 @@ func set_wander_target(target: CSGBox3D) -> void:
 		choose_random_destination()
 
 func _on_eat_area_entered(area: Area3D) -> void:
-	if area is FoodItem:
-		var food := area as FoodItem
+	if area is not FoodItem:
+		return
 
-		if food.is_consumed() or not is_alive():
-			return
+	var food := area as FoodItem
 
-		food.notify_reached_gecko()
-		feed(food)
+	# Only the bug the gecko was sent to is eaten, not every bug it walks past.
+	if food != hunt_target or food.is_consumed() or not is_alive():
+		return
+
+	_eat_hunted_food()
+
+
+## Sends the gecko to a bug that reached the bounds of the terrarium.
+func hunt(food: FoodItem) -> void:
+	if not _is_valid_food(food) or not is_alive():
+		return
+
+	if food == hunt_target or food in hunt_queue:
+		return
+
+	# Finish the current hunt first, then eat this bug.
+	if _is_valid_food(hunt_target):
+		hunt_queue.append(food)
+		return
+
+	_start_hunt(food)
+
+
+func _start_hunt(food: FoodItem) -> void:
+	hunt_target = food
+
+	if nav_agent != null:
+		nav_agent.target_position = food.global_position
+
+
+## Walks the gecko to the bug it was sent to and eats it.
+## Returns true while the gecko is busy hunting.
+func _process_hunt(delta: float) -> bool:
+	if hunt_target != null and not _is_valid_food(hunt_target):
+		hunt_target = null
+
+	while hunt_target == null and not hunt_queue.is_empty():
+		var next_food: FoodItem = hunt_queue.pop_front()
+
+		if _is_valid_food(next_food):
+			hunt_target = next_food
+
+	if hunt_target == null:
+		return false
+
+	var offset: Vector3 = hunt_target.global_position - global_position
+	offset.y = 0.0
+
+	# Eat the bug once the gecko has reached it.
+	if offset.length() <= eat_distance:
+		_eat_hunted_food()
+		return true
+
+	nav_agent.target_position = hunt_target.global_position
+	_move_towards(nav_agent.get_next_path_position(), delta)
+
+	return true
+
+
+func _is_valid_food(food: FoodItem) -> bool:
+	return food != null and is_instance_valid(food) and not food.is_consumed()
+
+
+func _eat_hunted_food() -> void:
+	if not _is_valid_food(hunt_target):
+		hunt_target = null
+		return
+
+	var food: FoodItem = hunt_target
+	hunt_target = null
+
+	food.notify_reached_gecko()
+	feed(food)
 
 func _physics_process(delta: float) -> void:
 	if not is_on_floor():
@@ -112,6 +187,10 @@ func _physics_process(delta: float) -> void:
 		move_and_slide()
 		return
 	
+
+	# A bug that reached the terrarium bounds is eaten before anything else.
+	if _process_hunt(delta):
+		return
 
 	if wander_bounds == null or not has_target:
 		velocity.x = 0.0
@@ -131,11 +210,21 @@ func _physics_process(delta: float) -> void:
 		return
 
 	# Move toward the next point on the navigation path.
-	var next_position: Vector3 = nav_agent.get_next_path_position()
-	var direction: Vector3 = global_position.direction_to(next_position)
+	_move_towards(nav_agent.get_next_path_position(), delta)
+
+
+## Turns the gecko towards [param target_position] and walks there.
+func _move_towards(target_position: Vector3, delta: float) -> void:
+	var direction: Vector3 = global_position.direction_to(target_position)
 
 	direction.y = 0.0
 	direction = direction.normalized()
+
+	if direction.length_squared() < 0.0001:
+		velocity.x = 0.0
+		velocity.z = 0.0
+		move_and_slide()
+		return
 	
 	var target_yaw: float = atan2(direction.x, direction.z)
 	global_rotation.y = rotate_toward(
