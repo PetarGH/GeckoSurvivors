@@ -53,7 +53,7 @@ var choosing_target: bool = false
 var is_waiting_to_roam: bool = false
 
 var hunt_target: FoodItem = null
-var hunt_queue: Array[FoodItem] = []
+var waiting_food: Array[FoodItem] = []
 
 var environmental_damage_timer: float = 0.0
 var environmental_damage_accumulated: float = 0.0
@@ -110,27 +110,46 @@ func _on_eat_area_entered(area: Area3D) -> void:
 	_eat_hunted_food()
 
 
-## Sends the gecko to a bug that reached the bounds of the terrarium.
+## Sends the gecko to the closest bug that reached the bounds of the terrarium.
 func hunt(food: FoodItem) -> void:
 	if not _is_valid_food(food) or not is_alive():
 		return
 
-	if food == hunt_target or food in hunt_queue:
+	if food == hunt_target or food in waiting_food:
 		return
 
-	# Finish the current hunt first, then eat this bug.
-	if _is_valid_food(hunt_target):
-		hunt_queue.append(food)
+	waiting_food.append(food)
+
+	# Keep walking to the bug the gecko is already hunting.
+	if not _is_valid_food(hunt_target):
+		_start_nearest_hunt()
+
+
+## Picks the closest bug waiting at the terrarium bounds and walks to it.
+func _start_nearest_hunt() -> void:
+	hunt_target = null
+
+	# Forget bugs that were eaten or removed in the meantime.
+	for index in range(waiting_food.size() - 1, -1, -1):
+		if not _is_valid_food(waiting_food[index]):
+			waiting_food.remove_at(index)
+
+	var closest_distance: float = INF
+
+	for food: FoodItem in waiting_food:
+		var distance: float = _horizontal_distance_to(food.global_position)
+
+		if distance < closest_distance:
+			closest_distance = distance
+			hunt_target = food
+
+	if hunt_target == null:
 		return
 
-	_start_hunt(food)
-
-
-func _start_hunt(food: FoodItem) -> void:
-	hunt_target = food
+	waiting_food.erase(hunt_target)
 
 	if nav_agent != null:
-		nav_agent.target_position = food.global_position
+		nav_agent.target_position = hunt_target.global_position
 
 
 ## Walks the gecko to the bug it was sent to and eats it.
@@ -139,20 +158,14 @@ func _process_hunt(delta: float) -> bool:
 	if hunt_target != null and not _is_valid_food(hunt_target):
 		hunt_target = null
 
-	while hunt_target == null and not hunt_queue.is_empty():
-		var next_food: FoodItem = hunt_queue.pop_front()
-
-		if _is_valid_food(next_food):
-			hunt_target = next_food
+	if hunt_target == null:
+		_start_nearest_hunt()
 
 	if hunt_target == null:
 		return false
 
-	var offset: Vector3 = hunt_target.global_position - global_position
-	offset.y = 0.0
-
 	# Eat the bug once the gecko has reached it.
-	if offset.length() <= eat_distance:
+	if _horizontal_distance_to(hunt_target.global_position) <= eat_distance:
 		_eat_hunted_food()
 		return true
 
@@ -164,6 +177,13 @@ func _process_hunt(delta: float) -> bool:
 
 func _is_valid_food(food: FoodItem) -> bool:
 	return food != null and is_instance_valid(food) and not food.is_consumed()
+
+
+func _horizontal_distance_to(target_position: Vector3) -> float:
+	var offset: Vector3 = target_position - global_position
+	offset.y = 0.0
+
+	return offset.length()
 
 
 func _eat_hunted_food() -> void:
