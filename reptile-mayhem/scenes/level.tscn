@@ -13,7 +13,6 @@
 [ext_resource type="Script" uid="uid://c2skp18pd455y" path="res://scripts/environment_ui.gd" id="11_8gofh"]
 [ext_resource type="Theme" uid="uid://kyycrg3gq8ln" path="res://themes/button.tres" id="11_8iemx"]
 [ext_resource type="Script" uid="uid://bie8qs1ktld5o" path="res://scripts/lose_screen.gd" id="11_64w2a"]
-[ext_resource type="Script" uid="uid://c66b8uklexoje" path="res://scripts/debug_controls.gd" id="16_debug"]
 [ext_resource type="FontFile" uid="uid://dctrfdggugy2d" path="res://fonts/Super Waffles.ttf" id="11_t1rx8"]
 [ext_resource type="Texture2D" uid="uid://bev2hwii8lic8" path="res://images/Glossy Gold Star Coin Icon.png" id="12_8gofh"]
 [ext_resource type="StyleBox" uid="uid://im2sdqhh2jqc" path="res://themes/ui_counters.tres" id="12_gunhw"]
@@ -22,6 +21,9 @@
 [ext_resource type="Script" uid="uid://jvfsb56gmqag" path="res://scripts/tool_tip_interact.gd" id="14_ux5qa"]
 [ext_resource type="PackedScene" uid="uid://c4yb4mko55vn8" path="res://scenes/tooltip.tscn" id="15_82cfe"]
 [ext_resource type="Texture2D" uid="uid://cvv0kr6jqy7sb" path="res://images/9806399.png" id="15_ux5qa"]
+[ext_resource type="Script" uid="uid://c66b8uklexoje" path="res://scripts/debug_controls.gd" id="16_debug"]
+[ext_resource type="PackedScene" uid="uid://cvph46armtwgy" path="res://scenes/turning_knob.tscn" id="23_5k0ak"]
+[ext_resource type="Material" uid="uid://dek2h7yqmqi8p" path="res://materials/development/development_orange.material" id="24_wu01b"]
 
 [sub_resource type="Environment" id="Environment_1vivr"]
 
@@ -207,10 +209,10 @@ humidity_label = NodePath("PanelContainer2/Label2")
 
 [node name="PanelContainer3" type="PanelContainer" parent="H&T_UI" unique_id=227427119]
 layout_mode = 0
-offset_left = 908.0
-offset_top = 39.0
-offset_right = 1070.0
-offset_bottom = 109.0
+offset_left = 979.0
+offset_top = 8.0
+offset_right = 1141.0
+offset_bottom = 79.0
 theme_override_styles/panel = ExtResource("12_gunhw")
 script = ExtResource("14_ux5qa")
 
@@ -237,15 +239,17 @@ text = "[center][img=36x36]res://images/9806399.png[/img][font_size=22][b]
 
 [node name="Points2" type="PanelContainer" parent="H&T_UI" unique_id=1399931032 node_paths=PackedStringArray("gecko", "points_label")]
 layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.068
-anchor_top = 0.051000003
-anchor_right = 0.23
-anchor_bottom = 0.17
-offset_left = -0.33600616
-offset_top = -0.048000336
-offset_right = 0.040008545
-offset_bottom = -0.16000366
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -60.0
+offset_top = -113.0
+offset_right = 72.0
+offset_bottom = -42.0
+grow_horizontal = 2
+grow_vertical = 0
 theme_override_styles/panel = ExtResource("12_gunhw")
 script = ExtResource("12_h6wmr")
 gecko = NodePath("../../Gecko")
@@ -271,14 +275,10 @@ vertical_alignment = 1
 
 [node name="PanelContainer2" type="PanelContainer" parent="H&T_UI" unique_id=2130612946]
 layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -244.0
-offset_top = 132.0
-offset_right = -82.0
-offset_bottom = 203.0
-grow_horizontal = 0
+offset_left = 79.0
+offset_top = 4.0
+offset_right = 241.0
+offset_bottom = 75.0
 theme_override_styles/panel = ExtResource("12_gunhw")
 script = ExtResource("14_ux5qa")
 
@@ -303,29 +303,27 @@ text = "[center][img=36x36]res://images/water-drop-icon-png.png[/img]
 "
 
 [node name="HumidityIcon" type="TextureRect" parent="H&T_UI" unique_id=555847160]
-layout_mode = 0
-offset_left = 830.0
-offset_top = 132.0
-offset_right = 906.0
-offset_bottom = 202.0
+layout_mode = 1
+offset_right = 76.0
+offset_bottom = 70.0
 texture = ExtResource("12_wc255")
 expand_mode = 1
 
 [node name="CoinsIcon" type="TextureRect" parent="H&T_UI" unique_id=274913315]
 layout_mode = 0
-offset_left = 2.0
-offset_top = 37.0
-offset_right = 78.0
-offset_bottom = 107.0
+offset_left = 434.0
+offset_top = 538.0
+offset_right = 510.0
+offset_bottom = 608.0
 texture = ExtResource("12_8gofh")
 expand_mode = 1
 
 [node name="TemperatureIcon" type="TextureRect" parent="H&T_UI" unique_id=521394628]
 layout_mode = 0
-offset_left = 830.0
-offset_top = 40.0
-offset_right = 906.0
-offset_bottom = 110.0
+offset_left = 906.0
+offset_top = 9.0
+offset_right = 982.0
+offset_bottom = 79.0
 texture = ExtResource("15_ux5qa")
 expand_mode = 1
 
@@ -338,25 +336,23 @@ offset_bottom = 460.0
 mouse_filter = 2
 theme = ExtResource("11_8iemx")
 theme_override_constants/separation = 12
-theme_override_fonts/font = ExtResource("11_t1rx8")
-theme_override_font_sizes/font_size = 28
 script = ExtResource("16_debug")
 environment = NodePath("../Terrarium/EnvironmentManager")
 gecko = NodePath("../Gecko")
 
 [node name="TempButton" type="Button" parent="DebugControls" unique_id=1739284417]
-layout_mode = 2
 custom_minimum_size = Vector2(260, 72)
+layout_mode = 2
 text = "Temp -10"
 
 [node name="MoistureButton" type="Button" parent="DebugControls" unique_id=1739284418]
-layout_mode = 2
 custom_minimum_size = Vector2(260, 72)
+layout_mode = 2
 text = "Moisture -10"
 
 [node name="KillButton" type="Button" parent="DebugControls" unique_id=1739284419]
-layout_mode = 2
 custom_minimum_size = Vector2(260, 72)
+layout_mode = 2
 text = "Kill Gecko"
 
 [node name="LoseScreen" type="Control" parent="." unique_id=1192377682 node_paths=PackedStringArray("gecko")]
@@ -414,6 +410,31 @@ text = "YOU LOSE"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="TurningKnob" parent="." unique_id=1924194282 node_paths=PackedStringArray("environment_manager") instance=ExtResource("23_5k0ak")]
+transform = Transform3D(-0.095542856, 0, 1.9977165, 0, 2, 0, -1.9977165, 0, -0.095542856, -8.8804455, -1.0290956, -1.4880729)
+environment_manager = NodePath("../Terrarium/EnvironmentManager")
+min_angle = -400.0
+max_angle = 400.0
+
+[node name="Sprite3D2" type="Sprite3D" parent="TurningKnob" unique_id=1225361592]
+transform = Transform3D(-0.0016384044, 0.034906726, 0.093841255, 0, -0.0016137983, 2.0344415, 0.034257583, 0.0016694502, 0.004488058, -0.014590502, 1.0220376, -0.013618946)
+texture = ExtResource("12_wc255")
+
+[node name="TurningKnob2" parent="." unique_id=602644678 node_paths=PackedStringArray("environment_manager") instance=ExtResource("23_5k0ak")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 9.548596, -1.0656118, -1.4728484)
+environment_manager = NodePath("../Terrarium/EnvironmentManager")
+adjusts_temperature = true
+min_angle = -400.0
+max_angle = 400.0
+
+[node name="CSGCylinder3D" parent="TurningKnob2" index="1" unique_id=2134368105]
+transform = Transform3D(0.026670033, 0, 0.9996443, 0, 1, 0, -0.9996443, 0, 0.026670033, 0, 0.4991455, 0)
+material_override = ExtResource("24_wu01b")
+
+[node name="Sprite3D" type="Sprite3D" parent="TurningKnob2" unique_id=1605905913]
+transform = Transform3D(0.17257701, 0, 0, 0, -0.0072315168, 2.1334314, 0, -0.15659757, -0.098519705, 0, 1.0220376, 0)
+texture = ExtResource("15_ux5qa")
+
 [connection signal="pressed" from="LoseScreen/ColorRect/Button" to="LoseScreen" method="_on_button_pressed"]
 
 [editable path="Terrarium"]
@@ -421,3 +442,4 @@ vertical_alignment = 1
 [editable path="H&T_UI/PanelContainer3/Tooltip"]
 [editable path="H&T_UI/Points2/Tooltip"]
 [editable path="H&T_UI/PanelContainer2/Tooltip"]
+[editable path="TurningKnob2"]

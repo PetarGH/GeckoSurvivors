@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://cvph46armtwgy"]
+
+[ext_resource type="Script" uid="uid://b4vk8snfm3iut" path="res://scripts/turning_knob.gd" id="1_c0elw"]
+[ext_resource type="Material" uid="uid://dggihx8wnrewy" path="res://materials/development/development_green.material" id="2_ivkt5"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_1vivr"]
+height = 0.9916992
+radius = 0.55615234
+
+[node name="TurningKnob" type="Area3D" unique_id=1924194282]
+script = ExtResource("1_c0elw")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1648414737]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5041504, 0)
+shape = SubResource("CylinderShape3D_1vivr")
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="." unique_id=2134368105]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4991455, 0)
+material_override = ExtResource("2_ivkt5")
+height = 1.001709
+
+[node name="CSGBox3D" type="CSGBox3D" parent="CSGCylinder3D" unique_id=2002029644]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.43573165, 0, 0.013958573)
+size = Vector3(0.5, 1, 0.20996094)

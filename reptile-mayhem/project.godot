@@ -15,6 +15,10 @@ run/main_scene="uid://ds4vu0sanlswx"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+RunStats="*res://scripts/run_stats.gd"
+
 [display]
 
 window/stretch/mode="canvas_items"
@@ -23,10 +27,6 @@ window/stretch/aspect="expand"
 [physics]
 
 3d/physics_engine="Jolt Physics"
-
-[autoload]
-
-RunStats="*res://scripts/run_stats.gd"
 
 [rendering]
 
