@@ -17,6 +17,7 @@ var has_died: bool = false
 @export var turn_speed_degrees: float =	 180.0
 @export var eat_area: Area3D
 @export var eat_distance: float = 1.5
+@export_range(1.0, 10.0, 0.1) var hunt_speed_multiplier: float = 3.0
 
 @export var species_data: GeckoSpeciesData:
 	set(value):
@@ -103,8 +104,14 @@ func _on_eat_area_entered(area: Area3D) -> void:
 
 	var food := area as FoodItem
 
+	if not is_alive() or not _is_valid_food(food):
+		return
+
+	# The bug the gecko was sent to may have been clicked away meanwhile.
+	_prune_hunt_state()
+
 	# Only the bug the gecko was sent to is eaten, not every bug it walks past.
-	if food != hunt_target or food.is_consumed() or not is_alive():
+	if food != hunt_target:
 		return
 
 	_eat_hunted_food()
@@ -112,7 +119,9 @@ func _on_eat_area_entered(area: Area3D) -> void:
 
 ## Sends the gecko to the closest bug that reached the bounds of the terrarium.
 func hunt(food: FoodItem) -> void:
-	if not _is_valid_food(food) or not is_alive():
+	_prune_hunt_state()
+
+	if not is_alive() or not _is_valid_food(food):
 		return
 
 	if food == hunt_target or food in waiting_food:
@@ -121,18 +130,14 @@ func hunt(food: FoodItem) -> void:
 	waiting_food.append(food)
 
 	# Keep walking to the bug the gecko is already hunting.
-	if not _is_valid_food(hunt_target):
+	if hunt_target == null:
 		_start_nearest_hunt()
 
 
 ## Picks the closest bug waiting at the terrarium bounds and walks to it.
 func _start_nearest_hunt() -> void:
+	_prune_hunt_state()
 	hunt_target = null
-
-	# Forget bugs that were eaten or removed in the meantime.
-	for index in range(waiting_food.size() - 1, -1, -1):
-		if not _is_valid_food(waiting_food[index]):
-			waiting_food.remove_at(index)
 
 	var closest_distance: float = INF
 
@@ -155,8 +160,7 @@ func _start_nearest_hunt() -> void:
 ## Walks the gecko to the bug it was sent to and eats it.
 ## Returns true while the gecko is busy hunting.
 func _process_hunt(delta: float) -> bool:
-	if hunt_target != null and not _is_valid_food(hunt_target):
-		hunt_target = null
+	_prune_hunt_state()
 
 	if hunt_target == null:
 		_start_nearest_hunt()
@@ -169,14 +173,41 @@ func _process_hunt(delta: float) -> bool:
 		_eat_hunted_food()
 		return true
 
-	nav_agent.target_position = hunt_target.global_position
-	_move_towards(nav_agent.get_next_path_position(), delta)
+	# Roaming may have pointed the agent somewhere else meanwhile, so put the
+	# bug back as the destination without resetting the path every frame.
+	var target_offset: Vector3 = nav_agent.target_position - hunt_target.global_position
+	target_offset.y = 0.0
+
+	if target_offset.length() > 0.1:
+		nav_agent.target_position = hunt_target.global_position
+
+	_move_towards(
+		nav_agent.get_next_path_position(),
+		delta,
+		SPEED * hunt_speed_multiplier
+	)
 
 	return true
 
 
-func _is_valid_food(food: FoodItem) -> bool:
-	return food != null and is_instance_valid(food) and not food.is_consumed()
+## Forgets bugs that were eaten or clicked away before the gecko reached them.
+func _prune_hunt_state() -> void:
+	if hunt_target != null and not _is_valid_food(hunt_target):
+		hunt_target = null
+
+	for index in range(waiting_food.size() - 1, -1, -1):
+		if not _is_valid_food(waiting_food[index]):
+			waiting_food.remove_at(index)
+
+
+## Bugs can be removed from the scene at any time, so the argument stays untyped:
+## a typed [FoodItem] parameter rejects an already freed instance before the check.
+func _is_valid_food(food) -> bool:
+	return (
+		food != null
+		and is_instance_valid(food)
+		and not (food as FoodItem).is_consumed()
+	)
 
 
 func _horizontal_distance_to(target_position: Vector3) -> float:
@@ -230,11 +261,11 @@ func _physics_process(delta: float) -> void:
 		return
 
 	# Move toward the next point on the navigation path.
-	_move_towards(nav_agent.get_next_path_position(), delta)
+	_move_towards(nav_agent.get_next_path_position(), delta, SPEED)
 
 
-## Turns the gecko towards [param target_position] and walks there.
-func _move_towards(target_position: Vector3, delta: float) -> void:
+## Turns the gecko towards [param target_position] and walks there at [param speed].
+func _move_towards(target_position: Vector3, delta: float, speed: float) -> void:
 	var direction: Vector3 = global_position.direction_to(target_position)
 
 	direction.y = 0.0
@@ -265,8 +296,8 @@ func _move_towards(target_position: Vector3, delta: float) -> void:
 		move_and_slide()
 		return
 
-	velocity.x = direction.x * SPEED
-	velocity.z = direction.z * SPEED
+	velocity.x = direction.x * speed
+	velocity.z = direction.z * speed
 
 	move_and_slide()
 
