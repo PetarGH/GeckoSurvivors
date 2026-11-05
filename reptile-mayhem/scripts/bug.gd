@@ -9,6 +9,10 @@ extends CharacterBody3D
 
 @export var SPEED: float = 5.0
 @export var wander_bounds: CSGBox3D
+## How fast the bug swings around to face the way it walks.
+@export var turn_speed_degrees: float = 540.0
+## Extra yaw applied to the mesh, for bugs whose model does not face +Z.
+@export var facing_offset_degrees: float = 0.0
 
 @export_group("Animations")
 @export var walk_animation: StringName = &"Walk"
@@ -45,13 +49,13 @@ func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 
-	_walk()
+	_walk(delta)
 	_update_walk_animation()
 
 
 ## Moves the bug towards its wander target, or stops it once it reached the
 ## terrarium bounds and is waiting for the gecko.
-func _walk() -> void:
+func _walk(delta: float) -> void:
 	if is_dying or has_reached_bounds:
 		# The bug bumped into the terrarium and waits for the gecko.
 		velocity.x = 0.0
@@ -87,7 +91,18 @@ func _walk() -> void:
 	velocity.x = direction.x * SPEED
 	velocity.z = direction.z * SPEED
 
+	_face_direction(direction, delta)
 	move_and_slide()
+
+
+## Turns the bug around so the mesh faces the way it is walking.
+func _face_direction(direction: Vector3, delta: float) -> void:
+	var target_yaw: float = atan2(direction.x, direction.z) + deg_to_rad(facing_offset_degrees)
+	rotation.y = rotate_toward(
+		rotation.y,
+		target_yaw,
+		deg_to_rad(turn_speed_degrees) * delta
+	)
 
 
 ## Runs the walk loop only while the bug is actually moving towards the
