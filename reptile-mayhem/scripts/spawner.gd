@@ -41,6 +41,11 @@ func start_spawning() -> void:
 		spawn_timer.start()
 
 
+## Returns true once every bug this spawner should create has been created.
+func has_finished_spawning() -> bool:
+	return spawned_count >= spawn_count
+
+
 func spawn_object() -> void:
 	if spawned_count >= spawn_count:
 		spawn_timer.stop()

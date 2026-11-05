@@ -24,6 +24,7 @@
 [ext_resource type="Script" uid="uid://c66b8uklexoje" path="res://scripts/debug_controls.gd" id="16_debug"]
 [ext_resource type="PackedScene" uid="uid://cvph46armtwgy" path="res://scenes/turning_knob.tscn" id="23_5k0ak"]
 [ext_resource type="Material" uid="uid://dek2h7yqmqi8p" path="res://materials/development/development_orange.material" id="24_wu01b"]
+[ext_resource type="Script" uid="uid://ccl4xrc0yalg7" path="res://scripts/win_screen.gd" id="25_winscr"]
 
 [sub_resource type="Environment" id="Environment_1vivr"]
 
@@ -410,6 +411,62 @@ text = "YOU LOSE"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="WinScreen" type="Control" parent="." node_paths=PackedStringArray("spawners", "gecko")]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("25_winscr")
+main_menu_scene_path = "uid://ds4vu0sanlswx"
+spawners = [NodePath("../Spawner"), NodePath("../Spawner2"), NodePath("../Spawner3"), NodePath("../Spawner4")]
+gecko = NodePath("../Gecko")
+
+[node name="ColorRect" type="ColorRect" parent="WinScreen"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.21568628, 0.41960785, 0.2509804, 0.59607846)
+
+[node name="Button" type="Button" parent="WinScreen/ColorRect"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.887
+anchor_top = 0.87100005
+anchor_right = 0.887
+anchor_bottom = 0.87100005
+offset_left = -167.82404
+offset_top = -46.40802
+offset_right = 91.175964
+offset_bottom = 23.59198
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("11_8iemx")
+theme_override_fonts/font = ExtResource("11_t1rx8")
+theme_override_font_sizes/font_size = 43
+text = "Continue >"
+
+[node name="Label" type="Label" parent="WinScreen/ColorRect"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 115.0
+offset_top = 55.0
+offset_right = -98.0
+offset_bottom = 220.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("11_t1rx8")
+theme_override_font_sizes/font_size = 105
+theme_override_styles/normal = SubResource("StyleBoxFlat_v5gy4")
+text = "YOU WIN"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="TurningKnob" parent="." unique_id=1924194282 node_paths=PackedStringArray("environment_manager") instance=ExtResource("23_5k0ak")]
 transform = Transform3D(-0.095542856, 0, 1.9977165, 0, 2, 0, -1.9977165, 0, -0.095542856, -8.8804455, -1.0290956, -1.4880729)
 environment_manager = NodePath("../Terrarium/EnvironmentManager")
@@ -436,6 +493,7 @@ transform = Transform3D(0.17257701, 0, 0, 0, -0.0072315168, 2.1334314, 0, -0.156
 texture = ExtResource("15_ux5qa")
 
 [connection signal="pressed" from="LoseScreen/ColorRect/Button" to="LoseScreen" method="_on_button_pressed"]
+[connection signal="pressed" from="WinScreen/ColorRect/Button" to="WinScreen" method="_on_button_pressed"]
 
 [editable path="Terrarium"]
 [editable path="Terrarium/M_Terrarium"]
