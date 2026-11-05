@@ -83,9 +83,23 @@ func _walk(delta: float) -> void:
 		return
 
 	var next_position := nav_agent.get_next_path_position()
-	var direction := global_position.direction_to(next_position)
 
+	# Navigation can occasionally return a bad point; never apply a non-finite transform.
+	if not next_position.is_finite() or not global_position.is_finite():
+		velocity.x = 0.0
+		velocity.z = 0.0
+		move_and_slide()
+		return
+
+	var direction := global_position.direction_to(next_position)
 	direction.y = 0.0
+
+	if direction.length_squared() < 0.0001 or not direction.is_finite():
+		velocity.x = 0.0
+		velocity.z = 0.0
+		move_and_slide()
+		return
+
 	direction = direction.normalized()
 
 	velocity.x = direction.x * SPEED
