@@ -79,7 +79,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 1, 0)
 light_color = Color(0.98237544, 0.50737685, 0, 1)
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=783121546]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.49260998, 5.5709095)
+transform = Transform3D(1.7480135, 0, 0, 0, 1.7480135, 0, 0, 0, 1.7480135, 0, -0.86743474, 5.5709095)
 navigation_mesh = SubResource("NavigationMesh_1vivr")
 
 [node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D" unique_id=1234824845]
@@ -365,8 +365,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("11_64w2a")
-main_menu_scene_path = "uid://ds4vu0sanlswx"
 gecko = NodePath("../Gecko")
+main_menu_scene_path = "uid://ds4vu0sanlswx"
 
 [node name="ColorRect" type="ColorRect" parent="LoseScreen" unique_id=1119220968]
 layout_mode = 1
@@ -411,7 +411,7 @@ text = "YOU LOSE"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="WinScreen" type="Control" parent="." node_paths=PackedStringArray("spawners", "gecko")]
+[node name="WinScreen" type="Control" parent="." unique_id=1345981908 node_paths=PackedStringArray("spawners", "gecko")]
 visible = false
 layout_mode = 3
 anchors_preset = 15
@@ -420,11 +420,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("25_winscr")
-main_menu_scene_path = "uid://ds4vu0sanlswx"
 spawners = [NodePath("../Spawner"), NodePath("../Spawner2"), NodePath("../Spawner3"), NodePath("../Spawner4")]
 gecko = NodePath("../Gecko")
+main_menu_scene_path = "uid://ds4vu0sanlswx"
 
-[node name="ColorRect" type="ColorRect" parent="WinScreen"]
+[node name="ColorRect" type="ColorRect" parent="WinScreen" unique_id=998606841]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -433,7 +433,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.21568628, 0.41960785, 0.2509804, 0.59607846)
 
-[node name="Button" type="Button" parent="WinScreen/ColorRect"]
+[node name="Button" type="Button" parent="WinScreen/ColorRect" unique_id=615298464]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.887
@@ -451,7 +451,7 @@ theme_override_fonts/font = ExtResource("11_t1rx8")
 theme_override_font_sizes/font_size = 43
 text = "Continue >"
 
-[node name="Label" type="Label" parent="WinScreen/ColorRect"]
+[node name="Label" type="Label" parent="WinScreen/ColorRect" unique_id=1274841931]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
