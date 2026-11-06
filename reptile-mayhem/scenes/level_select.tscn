@@ -1,0 +1,92 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/level_select.gd" id="1_sel"]
+[ext_resource type="Resource" path="res://resources/default_gecko_species.tres" id="2_species"]
+[ext_resource type="Theme" path="res://themes/button.tres" id="3_button"]
+[ext_resource type="FontFile" path="res://fonts/Super Waffles.ttf" id="4_font"]
+
+[sub_resource type="Gradient" id="Gradient_bg"]
+colors = PackedColorArray(0.08342805, 0.50625694, 0.45842367, 1, 0.19825613, 0.62338454, 0.90184987, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_bg"]
+gradient = SubResource("Gradient_bg")
+fill = 1
+fill_from = Vector2(0.49798387, 0.51008064)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_bg"]
+texture = SubResource("GradientTexture2D_bg")
+
+[node name="LevelSelect" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_sel")
+species = ExtResource("2_species")
+
+[node name="Background" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_bg")
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 14.0
+offset_bottom = 94.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 64
+theme_override_colors/font_color = Color(0.949, 1, 0.984, 1)
+text = "CHOOSE A LEVEL"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Subtitle" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 94.0
+offset_bottom = 128.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 22
+theme_override_colors/font_color = Color(0.86, 0.95, 0.92, 0.78)
+text = "Leopard Gecko"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BackButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 20.0
+offset_right = 148.0
+offset_bottom = 80.0
+theme = ExtResource("3_button")
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 30
+text = "Back"
+
+[node name="Tip" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -38.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 17
+theme_override_colors/font_color = Color(0.86, 0.95, 0.92, 0.62)
+text = "Your best score on every level is saved on this device."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]

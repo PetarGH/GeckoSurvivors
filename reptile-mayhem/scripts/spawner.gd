@@ -4,12 +4,16 @@ extends Node3D
 @export var target_object: CSGBox3D
 
 @export var spawn_count: int = 5
+@export var spawn_count_min: int = 3
+@export var spawn_count_max: int = 7
 @export var spawn_radius: float = 5.0
 @export var spawn_interval: float = 2.0
 
 var rng := RandomNumberGenerator.new()
 var spawned_count: int = 0
+var spawn_target_count: int = 0
 var spawn_timer: Timer
+var has_started: bool = false
 
 
 func _ready() -> void:
@@ -24,6 +28,7 @@ func _ready() -> void:
 
 
 func start_spawning() -> void:
+	has_started = true
 	if spawn_scenes.is_empty():
 		push_warning("No spawn scenes assigned!")
 		return
@@ -32,22 +37,43 @@ func start_spawning() -> void:
 		push_warning("No target CSGBox3D assigned!")
 		return
 
-	if spawn_count <= 0:
+	var min_c: int = min(spawn_count_min, spawn_count_max)
+	var max_c: int = max(spawn_count_min, spawn_count_max)
+	if spawn_count_min == spawn_count_max and spawn_count != 5:
+		# If only spawn_count was set, use it as the fixed count range of [count, count]
+		min_c = spawn_count
+		max_c = spawn_count
+	elif spawn_count_min == 3 and spawn_count_max == 7 and spawn_count != 5:
+		# Fallback: use spawn_count if it was set differently
+		pass
+	elif spawn_count_min == 0 and spawn_count_max == 0 and spawn_count > 0:
+		min_c = spawn_count
+		max_c = spawn_count
+
+	if spawn_timer != null:
+		spawn_timer.wait_time = spawn_interval
+
+	spawn_target_count = rng.randi_range(min_c, max_c)
+	if spawn_target_count <= 0:
+		if spawn_timer != null:
+			spawn_timer.stop()
 		return
 
 	spawn_object()
 
-	if spawned_count < spawn_count:
+	if spawned_count < spawn_target_count and spawn_timer != null:
 		spawn_timer.start()
 
 
 ## Returns true once every bug this spawner should create has been created.
 func has_finished_spawning() -> bool:
-	return spawned_count >= spawn_count
+	if not has_started:
+		return false
+	return spawned_count >= spawn_target_count
 
 
 func spawn_object() -> void:
-	if spawned_count >= spawn_count:
+	if spawned_count >= spawn_target_count:
 		spawn_timer.stop()
 		return
 

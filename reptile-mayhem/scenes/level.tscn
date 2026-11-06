@@ -24,6 +24,8 @@
 [ext_resource type="PackedScene" uid="uid://cvph46armtwgy" path="res://scenes/turning_knob.tscn" id="23_5k0ak"]
 [ext_resource type="Material" uid="uid://dek2h7yqmqi8p" path="res://materials/development/development_orange.material" id="24_wu01b"]
 [ext_resource type="Script" uid="uid://ccl4xrc0yalg7" path="res://scripts/win_screen.gd" id="25_winscr"]
+[ext_resource type="Script" uid="uid://bdftm105vb0tu" path="res://scripts/level.gd" id="26_level"]
+[ext_resource type="PackedScene" uid="uid://dh0wm5b46ude1" path="res://scenes/broccoli.tscn" id="27_broccoli"]
 
 [sub_resource type="Environment" id="Environment_1vivr"]
 
@@ -57,6 +59,7 @@ corner_radius_bottom_right = 30
 corner_radius_bottom_left = 30
 
 [node name="Level" type="Node3D" unique_id=89402164]
+script = ExtResource("26_level")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=900064872]
 transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
@@ -88,21 +91,28 @@ size = Vector3(40.03589, 1, 30)
 
 [node name="Spawner" parent="." unique_id=1569577388 node_paths=PackedStringArray("target_object") instance=ExtResource("6_klq6b")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.13520193, 1.2982445, 12.181291)
-spawn_scenes = Array[PackedScene]([ExtResource("4_b121j"), ExtResource("3_ppgk2"), ExtResource("5_8c41q")])
+spawn_scenes = Array[PackedScene]([ExtResource("4_b121j"), ExtResource("3_ppgk2"), ExtResource("5_8c41q"), ExtResource("27_broccoli")])
 target_object = NodePath("../Terrarium/CSGBox3D")
 spawn_count = 20
 spawn_interval = 1.0
 
 [node name="Spawner3" parent="." unique_id=567200910 node_paths=PackedStringArray("target_object") instance=ExtResource("6_klq6b")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.56804, 1.2982445, 24.315086)
-spawn_scenes = Array[PackedScene]([ExtResource("4_b121j"), ExtResource("3_ppgk2"), ExtResource("5_8c41q")])
+spawn_scenes = Array[PackedScene]([ExtResource("4_b121j"), ExtResource("3_ppgk2"), ExtResource("5_8c41q"), ExtResource("27_broccoli")])
 target_object = NodePath("../Terrarium/CSGBox3D")
 spawn_count = 20
 spawn_interval = 1.0
 
 [node name="Spawner2" parent="." unique_id=1459216011 node_paths=PackedStringArray("target_object") instance=ExtResource("6_klq6b")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24.69599, 1.2982445, 19.294197)
-spawn_scenes = Array[PackedScene]([ExtResource("4_b121j"), ExtResource("3_ppgk2"), ExtResource("5_8c41q")])
+spawn_scenes = Array[PackedScene]([ExtResource("4_b121j"), ExtResource("3_ppgk2"), ExtResource("5_8c41q"), ExtResource("27_broccoli")])
+target_object = NodePath("../Terrarium/CSGBox3D")
+spawn_count = 20
+spawn_interval = 1.0
+
+[node name="Spawner4" parent="." unique_id=771204633 node_paths=PackedStringArray("target_object") instance=ExtResource("6_klq6b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 1.2982445, -9.5)
+spawn_scenes = Array[PackedScene]([ExtResource("4_b121j"), ExtResource("3_ppgk2"), ExtResource("5_8c41q"), ExtResource("27_broccoli")])
 target_object = NodePath("../Terrarium/CSGBox3D")
 spawn_count = 20
 spawn_interval = 1.0
@@ -162,7 +172,7 @@ humidity_decay_max = 0.25
 script = ExtResource("4_mx8sn")
 countdown_timer = NodePath("Timer")
 countdown_label = NodePath("CanvasLayer/Label")
-spawners = [NodePath("../Spawner"), NodePath("../Spawner2"), NodePath("../Spawner3")]
+spawners = [NodePath("../Spawner"), NodePath("../Spawner2"), NodePath("../Spawner3"), NodePath("../Spawner4")]
 
 [node name="Timer" type="Timer" parent="Node" unique_id=1413627034]
 wait_time = 3.0
@@ -413,7 +423,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("25_winscr")
-spawners = [NodePath("../Spawner"), NodePath("../Spawner2"), NodePath("../Spawner3")]
+spawners = [NodePath("../Spawner"), NodePath("../Spawner2"), NodePath("../Spawner3"), NodePath("../Spawner4")]
 gecko = NodePath("../Gecko")
 main_menu_scene_path = "uid://ds4vu0sanlswx"
 

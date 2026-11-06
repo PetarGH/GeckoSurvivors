@@ -5,8 +5,10 @@
 [resource]
 script = ExtResource("1_species")
 species_name = "Leopard Gecko"
+species_id = "leopard_gecko"
 ideal_temp_range = Vector2(24, 32)
 ideal_humidity_range = Vector2(30, 50)
 env_damage_rate = 2.0
 preferred_biome = 2
 incorrect_food_damage = 15.0
+level_paths = PackedStringArray("res://resources/levels/leopard_gecko/level_1.tres", "res://resources/levels/leopard_gecko/level_2.tres", "res://resources/levels/leopard_gecko/level_3.tres")

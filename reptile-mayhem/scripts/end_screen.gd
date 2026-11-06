@@ -18,9 +18,32 @@ func _ready() -> void:
 
 ## Shows this screen with the stats of the finished run and pauses the game.
 func show_screen() -> void:
+	GameSession.record_selected_run(_run_score(), _is_victory())
 	_build_stats()
 	show()
 	Engine.time_scale = 0
+
+
+## Overridden by screens that end a successful run.
+func _is_victory() -> bool:
+	return false
+
+
+## Score of the run that just ended: the points the gecko earned, which is the
+## number shown on the HUD.
+func _run_score() -> int:
+	var gecko := get_tree().get_first_node_in_group(&"gecko") as Gecko
+
+	if gecko != null:
+		return gecko.current_points
+
+	var current := get_tree().current_scene
+
+	if current == null:
+		return 0
+
+	var terrarium := current.get_node_or_null(^"Terrarium") as Terrarium
+	return terrarium.score if terrarium != null else 0
 
 
 func _on_button_pressed() -> void:

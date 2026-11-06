@@ -9,7 +9,7 @@ radius = 0.51
 
 [sub_resource type="Animation" id="Animation_die"]
 resource_name = "Die"
-length = 0.7
+length = 0.56666666
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -17,10 +17,10 @@ tracks/0/path = NodePath("Visual:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.15, 0.4, 0.7),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector3(0, 0, 0), Vector3(0.25, 0, 0.12), Vector3(-1.1, 0, 0.25), Vector3(-1.35, 0, 0.3)]
+"values": [Vector3(0, 0, 0), Vector3(0.25, 0, 0.12)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -29,10 +29,85 @@ tracks/1/path = NodePath("Visual:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.15, 0.4, 0.7),
+"times": PackedFloat32Array(0, 0.15, 0.4, 0.53333336),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
 "values": [Vector3(0, 0, 0), Vector3(0, 0.1, 0), Vector3(0, 0.28, 0), Vector3(0, 0.22, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Visual/M_Firefly/Firefly:blend_shapes/shapekey_die")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.53333336),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Visual/M_Firefly/Firefly:blend_shapes/shapekey_flightpose")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.56666666),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.0, 0.0]
+}
+
+[sub_resource type="Animation" id="Animation_fjwvr"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visual/M_Firefly/Firefly:blend_shapes/shapekey_die")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visual/M_Firefly/Firefly:blend_shapes/shapekey_flying1")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Visual/M_Firefly/Firefly:blend_shapes/shapekey_flying2")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Visual/M_Firefly/Firefly:blend_shapes/shapekey_flightpose")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
 }
 
 [sub_resource type="Animation" id="Animation_vanish"]
@@ -53,7 +128,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_walk"]
 resource_name = "Walk"
-length = 0.5
+length = 0.53333336
 loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -79,10 +154,47 @@ tracks/1/keys = {
 "update": 0,
 "values": [Vector3(0, 0, 0.12), Vector3(0, 0, 0), Vector3(0, 0, -0.12), Vector3(0, 0, 0), Vector3(0, 0, 0.12)]
 }
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Visual/M_Firefly/Firefly:blend_shapes/shapekey_flying1")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.16, 0.29, 0.39, 0.49),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 1.0, 0.0, 1.0, 0.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Visual/M_Firefly/Firefly:blend_shapes/shapekey_flying2")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.11, 0.19, 0.28, 0.36, 0.44, 0.52),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 1.0, 0.22034, 1.0, 0.14483, 1.0, 0.0]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Visual/M_Firefly/Firefly:blend_shapes/shapekey_flightpose")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.53333336),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.0, 1.0]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_bug"]
 _data = {
 &"Die": SubResource("Animation_die"),
+&"RESET": SubResource("Animation_fjwvr"),
 &"Vanish": SubResource("Animation_vanish"),
 &"Walk": SubResource("Animation_walk")
 }
@@ -91,7 +203,6 @@ _data = {
 
 [node name="Firefly" type="CharacterBody3D" unique_id=1633903147]
 collision_layer = 2
-collision_mask = 1
 floor_snap_length = 0.3
 script = ExtResource("2_bug")
 
@@ -99,11 +210,13 @@ script = ExtResource("2_bug")
 food_type = 3
 
 [node name="CollisionShape3D" parent="FoodItem" index="0" unique_id=1553226084]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 0.79732823, 0)
 shape = SubResource("SphereShape3D_c74hx")
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=2132024037]
 
 [node name="Visual" type="Node3D" parent="." unique_id=43089299]
+transform = Transform3D(0.99280864, -0.119712204, 0, 0.11599064, 0.96194464, -0.24740396, 0.029617274, 0.2456248, 0.9689124, 0, 0.22, 0)
 
 [node name="M_Firefly" parent="Visual" unique_id=2071675281 instance=ExtResource("3_mesh")]
 
@@ -111,8 +224,10 @@ shape = SubResource("SphereShape3D_c74hx")
 libraries/ = SubResource("AnimationLibrary_bug")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1204472865]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 0.8152045, 0)
 shape = SubResource("SphereShape3D_8vrlf")
 
 [connection signal="input_event" from="FoodItem" to="." method="_on_food_item_input_event"]
 
 [editable path="FoodItem"]
+[editable path="Visual/M_Firefly"]
