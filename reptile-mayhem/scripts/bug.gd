@@ -268,14 +268,15 @@ func _on_animation_finished(finished_animation: StringName) -> void:
 
 
 func _get_hunt_speed() -> float:
-	var gecko := get_tree().get_first_node_in_group(&"gecko") as Gecko
+	var gecko_node := get_tree().get_first_node_in_group(&"gecko")
+	var gecko := gecko_node as Gecko
 	if gecko == null or food_item == null:
 		return _base_speed
 
 	if gecko.hunt_target == food_item:
-		var dist := global_position.distance_to(gecko.global_position)
-		var max_dist := 12.0
-		var t := clampf(dist / max_dist, 0.0, 1.0)
+		var dist: float = global_position.distance_to(gecko.global_position)
+		var max_dist: float = 12.0
+		var t: float = clampf(dist / max_dist, 0.0, 1.0)
 		return lerpf(2.0, 5.0, t)
 
 	return _base_speed

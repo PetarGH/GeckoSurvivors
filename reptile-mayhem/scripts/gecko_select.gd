@@ -449,7 +449,7 @@ func _food_name(food_type: int) -> String:
 
 
 func _biome_name(biome: int) -> String:
-	var names: Array = HabitatEnums.BiomeType.keys()
+	var names := HabitatEnums.BiomeType.keys()
 	if biome < 0 or biome >= names.size():
 		return "Unknown"
 	return String(names[biome]).capitalize()

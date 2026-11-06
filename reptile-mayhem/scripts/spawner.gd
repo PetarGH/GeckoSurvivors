@@ -35,8 +35,8 @@ func start_spawning() -> void:
 		push_warning("No target CSGBox3D assigned!")
 		return
 
-	var min_c := min(spawn_count_min, spawn_count_max)
-	var max_c := max(spawn_count_min, spawn_count_max)
+	var min_c: int = min(spawn_count_min, spawn_count_max)
+	var max_c: int = max(spawn_count_min, spawn_count_max)
 	if spawn_count_min == spawn_count_max and spawn_count != 5:
 		# If only spawn_count was set, use it as the fixed count range of [count, count]
 		min_c = spawn_count
