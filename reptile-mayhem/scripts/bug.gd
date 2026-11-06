@@ -36,12 +36,18 @@ func _ready() -> void:
 	rng.randomize()
 
 	# Keep bugs on the ground and off of each other's physics bodies.
-	floor_snap_length = 0.3
+	floor_snap_length = 0.5
 	collision_layer = 2
 	collision_mask = 1
 
+	_align_collision_to_ground()
+
 	if animation_player != null:
 		animation_player.animation_finished.connect(_on_animation_finished)
+
+	# Drop onto the floor right away so a freshly spawned bug never hangs in the air.
+	await get_tree().physics_frame
+	_snap_to_ground()
 
 
 func set_wander_target(target: CSGBox3D) -> void:
@@ -262,3 +268,48 @@ func _on_food_item_input_event(camera: Node, event: InputEvent, event_position: 
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			die()
+
+
+## Moves the body collision up so its bottom rests at the bug's origin, which
+## keeps the mesh sitting on the floor instead of floating above it.
+func _align_collision_to_ground() -> void:
+	var body_collision := get_node_or_null(^"CollisionShape3D") as CollisionShape3D
+
+	if body_collision == null or body_collision.shape == null:
+		return
+
+	var bottom := _shape_bottom_extent(body_collision.shape)
+
+	if bottom > 0.0:
+		body_collision.position.y = bottom
+
+
+func _shape_bottom_extent(shape: Shape3D) -> float:
+	if shape is SphereShape3D:
+		return (shape as SphereShape3D).radius
+	if shape is CapsuleShape3D:
+		return (shape as CapsuleShape3D).height * 0.5
+	if shape is BoxShape3D:
+		return (shape as BoxShape3D).size.y * 0.5
+	return 0.0
+
+
+## Pushes the bug down until it rests on whatever is under it.
+func _snap_to_ground() -> void:
+	if not is_inside_tree():
+		return
+
+	var space := get_world_3d().direct_space_state
+	var from := global_position + Vector3.UP * 1.0
+	var to := global_position + Vector3.DOWN * 12.0
+	var query := PhysicsRayQueryParameters3D.create(from, to)
+	query.exclude = [get_rid()]
+	var hit: Dictionary = space.intersect_ray(query)
+
+	if hit.is_empty():
+		return
+
+	var point: Vector3 = hit["position"]
+	var collision := get_node_or_null(^"CollisionShape3D") as CollisionShape3D
+	var lift := _shape_bottom_extent(collision.shape) if collision != null and collision.shape != null else 0.0
+	global_position.y = point.y

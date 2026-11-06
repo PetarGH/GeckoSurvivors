@@ -10,7 +10,8 @@ enum FoodType {
 	CRICKET,
 	BANANA,
 	PAPAYA,
-	MANGO
+	MANGO,
+	BROCCOLI,
 }
 
 enum BiomeType {

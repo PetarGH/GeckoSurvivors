@@ -353,10 +353,9 @@ func _build_food_row() -> HBoxContainer:
 	for food_type in _accepted_foods():
 		row.add_child(_make_food_chip(_food_name(food_type), true))
 
-	# The firefly is the food this gecko must avoid.
-	var avoided := HabitatEnums.FoodType.BEETLE
-	if not _is_food_accepted(avoided):
-		row.add_child(_make_food_chip("Firefly", false))
+	# Vegetables hurt this gecko, so make that warning impossible to miss.
+	if not _is_food_accepted(HabitatEnums.FoodType.BROCCOLI):
+		row.add_child(_make_food_chip("Vegetables", false))
 
 	return row
 
@@ -437,7 +436,7 @@ func _accepted_foods() -> Array:
 
 func _is_food_accepted(food_type: int) -> bool:
 	if species == null:
-		return food_type != HabitatEnums.FoodType.BEETLE
+		return food_type != HabitatEnums.FoodType.BROCCOLI
 	return species.is_food_accepted(food_type)
 
 
@@ -459,6 +458,8 @@ func _food_name(food_type: int) -> String:
 			return "Papaya"
 		HabitatEnums.FoodType.MANGO:
 			return "Mango"
+		HabitatEnums.FoodType.BROCCOLI:
+			return "Broccoli"
 	return "Food"
 
 
