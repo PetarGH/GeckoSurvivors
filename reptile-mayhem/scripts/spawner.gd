@@ -13,6 +13,7 @@ var rng := RandomNumberGenerator.new()
 var spawned_count: int = 0
 var spawn_target_count: int = 0
 var spawn_timer: Timer
+var has_started: bool = false
 
 
 func _ready() -> void:
@@ -27,6 +28,7 @@ func _ready() -> void:
 
 
 func start_spawning() -> void:
+	has_started = true
 	if spawn_scenes.is_empty():
 		push_warning("No spawn scenes assigned!")
 		return
@@ -44,19 +46,29 @@ func start_spawning() -> void:
 	elif spawn_count_min == 3 and spawn_count_max == 7 and spawn_count != 5:
 		# Fallback: use spawn_count if it was set differently
 		pass
+	elif spawn_count_min == 0 and spawn_count_max == 0 and spawn_count > 0:
+		min_c = spawn_count
+		max_c = spawn_count
+
+	if spawn_timer != null:
+		spawn_timer.wait_time = spawn_interval
 
 	spawn_target_count = rng.randi_range(min_c, max_c)
 	if spawn_target_count <= 0:
+		if spawn_timer != null:
+			spawn_timer.stop()
 		return
 
 	spawn_object()
 
-	if spawned_count < spawn_target_count:
+	if spawned_count < spawn_target_count and spawn_timer != null:
 		spawn_timer.start()
 
 
 ## Returns true once every bug this spawner should create has been created.
 func has_finished_spawning() -> bool:
+	if not has_started:
+		return false
 	return spawned_count >= spawn_target_count
 
 
