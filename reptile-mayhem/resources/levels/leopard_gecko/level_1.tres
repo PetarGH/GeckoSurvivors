@@ -1,19 +1,12 @@
-[gd_resource type="Resource" script_class="LevelData" format=3]
+[gd_resource type="Resource" script_class="LevelData" format=3 uid="uid://s281u8t1okrn"]
 
-[ext_resource type="Script" path="res://scripts/level_data.gd" id="1_data"]
-[ext_resource type="PackedScene" path="res://scenes/level.tscn" id="2_scene"]
+[ext_resource type="Script" uid="uid://dwmpogdyuaivw" path="res://scripts/level_data.gd" id="1_data"]
+[ext_resource type="PackedScene" uid="uid://b5mgtdynv3jll" path="res://scenes/level.tscn" id="2_scene"]
 
 [resource]
 script = ExtResource("1_data")
-level_number = 1
 level_name = "First Bites"
 description = "Two feeders and a slow, gentle drain on the tank."
-spawner_count = 2
-bugs_per_spawner_min = 3
-bugs_per_spawner_max = 5
-spawn_interval = 3.0
-temp_decay_min = 0.05
-temp_decay_max = 0.2
-humidity_decay_min = 0.15
-humidity_decay_max = 0.25
+bugs_per_spawner_min = 5
+spawn_interval = 4.5
 scene = ExtResource("2_scene")

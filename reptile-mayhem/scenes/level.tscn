@@ -24,8 +24,8 @@
 [ext_resource type="PackedScene" uid="uid://cvph46armtwgy" path="res://scenes/turning_knob.tscn" id="23_5k0ak"]
 [ext_resource type="Material" uid="uid://dek2h7yqmqi8p" path="res://materials/development/development_orange.material" id="24_wu01b"]
 [ext_resource type="Script" uid="uid://ccl4xrc0yalg7" path="res://scripts/win_screen.gd" id="25_winscr"]
-[ext_resource type="Script" path="res://scripts/level.gd" id="26_level"]
-[ext_resource type="PackedScene" path="res://scenes/broccoli.tscn" id="27_broccoli"]
+[ext_resource type="Script" uid="uid://bdftm105vb0tu" path="res://scripts/level.gd" id="26_level"]
+[ext_resource type="PackedScene" uid="uid://dh0wm5b46ude1" path="res://scenes/broccoli.tscn" id="27_broccoli"]
 
 [sub_resource type="Environment" id="Environment_1vivr"]
 
@@ -111,7 +111,7 @@ spawn_count = 20
 spawn_interval = 1.0
 
 [node name="Spawner4" parent="." unique_id=771204633 node_paths=PackedStringArray("target_object") instance=ExtResource("6_klq6b")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.0, 1.2982445, -9.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 1.2982445, -9.5)
 spawn_scenes = Array[PackedScene]([ExtResource("4_b121j"), ExtResource("3_ppgk2"), ExtResource("5_8c41q"), ExtResource("27_broccoli")])
 target_object = NodePath("../Terrarium/CSGBox3D")
 spawn_count = 20

@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="LevelData" format=3]
+[gd_resource type="Resource" script_class="LevelData" format=3 uid="uid://vecym7vlfuvn"]
 
-[ext_resource type="Script" path="res://scripts/level_data.gd" id="1_data"]
-[ext_resource type="PackedScene" path="res://scenes/level.tscn" id="2_scene"]
+[ext_resource type="Script" uid="uid://dwmpogdyuaivw" path="res://scripts/level_data.gd" id="1_data"]
+[ext_resource type="PackedScene" uid="uid://b5mgtdynv3jll" path="res://scenes/level.tscn" id="2_scene"]
 
 [resource]
 script = ExtResource("1_data")
@@ -9,9 +9,9 @@ level_number = 3
 level_name = "Desert Blaze"
 description = "Four feeders and a tank that dries out fast."
 spawner_count = 4
-bugs_per_spawner_min = 7
-bugs_per_spawner_max = 10
-spawn_interval = 1.0
+bugs_per_spawner_min = 11
+bugs_per_spawner_max = 15
+spawn_interval = 2.5
 temp_decay_min = 0.6
 temp_decay_max = 0.8
 humidity_decay_min = 0.7
