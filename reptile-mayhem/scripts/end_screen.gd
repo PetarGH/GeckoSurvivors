@@ -29,8 +29,14 @@ func _is_victory() -> bool:
 	return false
 
 
-## Score of the run that just ended, read from the terrarium in the level.
+## Score of the run that just ended: the points the gecko earned, which is the
+## number shown on the HUD.
 func _run_score() -> int:
+	var gecko := get_tree().get_first_node_in_group(&"gecko") as Gecko
+
+	if gecko != null:
+		return gecko.current_points
+
 	var current := get_tree().current_scene
 
 	if current == null:
