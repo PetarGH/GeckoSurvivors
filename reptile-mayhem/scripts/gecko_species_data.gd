@@ -3,6 +3,8 @@ extends Resource
 ## Resource defining the biological parameters and habitat preferences for a gecko species.
 
 @export var species_name: String = ""
+## Stable key used to store this species' progress in the save file.
+@export var species_id: String = ""
 @export var ideal_temp_range: Vector2 = Vector2(24.0, 30.0)
 @export var ideal_humidity_range: Vector2 = Vector2(40.0, 60.0)
 @export var env_damage_rate: float = 1.0
@@ -10,6 +12,26 @@ extends Resource
 @export var preferred_biome: HabitatEnums.BiomeType = HabitatEnums.BiomeType.MEDITERRANEAN
 @export var max_health: float = 100.0
 @export var incorrect_food_damage: float = 10.0
+
+
+@export_group("Campaign")
+## Levels the player can learn this gecko with, in play order.
+@export var level_paths: PackedStringArray = PackedStringArray()
+
+
+## Loads this gecko's levels in order, skipping paths that are not levels.
+func get_levels() -> Array[LevelData]:
+	var result: Array[LevelData] = []
+
+	for path: String in level_paths:
+		var resource: Resource = load(path)
+
+		if resource is LevelData:
+			result.append(resource as LevelData)
+		else:
+			push_warning("%s: %s is not a LevelData" % [species_name, path])
+
+	return result
 
 
 ## Returns true if the given temperature falls within [member ideal_temp_range].

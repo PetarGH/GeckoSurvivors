@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3]
 
 [ext_resource type="Script" path="res://scripts/gecko_select.gd" id="1_sel"]
-[ext_resource type="PackedScene" path="res://scenes/level.tscn" id="2_level"]
+[ext_resource type="PackedScene" path="res://scenes/level_select.tscn" id="2_levels"]
 [ext_resource type="Resource" path="res://resources/default_gecko_species.tres" id="4_species"]
 [ext_resource type="Theme" path="res://themes/button.tres" id="5_button"]
 [ext_resource type="FontFile" path="res://fonts/Super Waffles.ttf" id="6_font"]
@@ -25,7 +25,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_sel")
-level_scene = ExtResource("2_level")
+next_scene = ExtResource("2_levels")
 species = ExtResource("4_species")
 
 [node name="Background" type="Panel" parent="."]

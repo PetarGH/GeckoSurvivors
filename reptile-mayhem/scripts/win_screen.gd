@@ -20,6 +20,10 @@ func _ready() -> void:
 	_check_timer.start()
 
 
+func _is_victory() -> bool:
+	return true
+
+
 func _check_for_win() -> void:
 	if not _is_run_won():
 		return

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="LevelData" format=3]
+
+[ext_resource type="Script" path="res://scripts/level_data.gd" id="1_data"]
+[ext_resource type="PackedScene" path="res://scenes/level.tscn" id="2_scene"]
+
+[resource]
+script = ExtResource("1_data")
+level_number = 2
+level_name = "Rising Heat"
+description = "Three feeders while the heat and the air start slipping."
+spawner_count = 3
+bugs_per_spawner = 7
+temp_decay_min = 0.3
+temp_decay_max = 0.4
+humidity_decay_min = 0.3
+humidity_decay_max = 0.4
+scene = ExtResource("2_scene")

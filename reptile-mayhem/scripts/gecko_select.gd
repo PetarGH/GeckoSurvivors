@@ -14,7 +14,7 @@ const GECKO_MESH: PackedScene = preload(
 const MENU_SCENE := "res://scenes/main_menu_scene.tscn"
 
 ## Scene loaded when the player picks the gecko.
-@export var level_scene: PackedScene
+@export var next_scene: PackedScene
 ## Species shown on the card.
 @export var species: GeckoSpeciesData
 
@@ -53,6 +53,7 @@ var _intro_tween: Tween
 
 
 func _ready() -> void:
+	GameSession.select_species(species)
 	_build_card()
 	_build_card_content()
 	_setup_portrait()
@@ -186,7 +187,7 @@ func _build_card_content() -> void:
 	legend.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	column.add_child(legend)
 
-	_hint = _make_label("Click to start", 16, CREAM)
+	_hint = _make_label("Click to continue", 16, CREAM)
 	_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	column.add_child(_hint)
 
@@ -549,7 +550,7 @@ func _on_card_pressed() -> void:
 	tween.parallel().tween_property(_outline, "modulate:a", 1.0, 0.14)
 	await tween.finished
 
-	_leave_to(level_scene)
+	_leave_to(next_scene)
 
 
 func _on_back_button_pressed() -> void:
