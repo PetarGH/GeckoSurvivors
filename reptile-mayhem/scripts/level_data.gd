@@ -11,7 +11,9 @@ extends Resource
 
 @export_group("Bugs")
 @export_range(1, 12, 1) var spawner_count: int = 2
-@export_range(1, 50, 1) var bugs_per_spawner: int = 5
+@export_range(1, 50, 1) var bugs_per_spawner_min: int = 3
+@export_range(1, 50, 1) var bugs_per_spawner_max: int = 7
+@export_range(0.1, 10.0, 0.1) var spawn_interval: float = 2.0
 
 
 @export_group("Simulation Rates")
@@ -35,4 +37,4 @@ func get_id() -> String:
 
 ## Total number of bugs the player has to deal with.
 func total_bugs() -> int:
-	return spawner_count * bugs_per_spawner
+	return spawner_count * bugs_per_spawner_max

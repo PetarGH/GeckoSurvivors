@@ -25,7 +25,7 @@ func _ready() -> void:
 
 
 ## Uses only the first [member LevelData.spawner_count] spawners, each with
-## [member LevelData.bugs_per_spawner] bugs. The rest are hidden and idle.
+## bugs in a range. The rest are hidden and idle.
 func _apply_spawners(data: LevelData) -> void:
 	for index in SPAWNER_NAMES.size():
 		var spawner := get_node_or_null(
@@ -37,7 +37,15 @@ func _apply_spawners(data: LevelData) -> void:
 
 		var active := index < data.spawner_count
 		spawner.visible = active
-		spawner.set("spawn_count", data.bugs_per_spawner if active else 0)
+		if active:
+			spawner.set("spawn_count_min", data.bugs_per_spawner_min)
+			spawner.set("spawn_count_max", data.bugs_per_spawner_max)
+			spawner.set("spawn_interval", data.spawn_interval)
+			spawner.set("spawn_count", data.bugs_per_spawner_max)
+		else:
+			spawner.set("spawn_count_min", 0)
+			spawner.set("spawn_count_max", 0)
+			spawner.set("spawn_count", 0)
 
 
 func _apply_environment(data: LevelData) -> void:

@@ -172,21 +172,6 @@ func _build_card_content() -> void:
 	_portrait_frame = _build_portrait_frame()
 	column.add_child(_portrait_frame)
 
-	column.add_child(_build_environment_row())
-
-	var food_caption := _make_label("WHAT IT EATS", 14, MUTED)
-	food_caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	column.add_child(food_caption)
-
-	column.add_child(_build_food_row())
-
-	var legend := _make_label(
-		"Green is good for it. Never feed it the red one.", 15, MUTED
-	)
-	legend.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	legend.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	column.add_child(legend)
-
 	_hint = _make_label("Click to continue", 16, CREAM)
 	_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	column.add_child(_hint)

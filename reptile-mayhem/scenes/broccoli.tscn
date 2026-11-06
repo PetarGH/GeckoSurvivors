@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://dcvmhyc7vtv38" path="res://meshes/M_Broccoli.glb" id="3_1n7s1"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_c74hx"]
-radius = 0.51
+radius = 0.8
 
 [sub_resource type="Animation" id="Animation_die"]
 resource_name = "Die"
@@ -140,6 +140,7 @@ _data = {
 }
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_8vrlf"]
+radius = 0.25
 
 [node name="broccoli" type="CharacterBody3D" unique_id=1633903147]
 collision_layer = 2

@@ -30,10 +30,12 @@ var has_target := false
 var choosing_target := false
 var has_reached_bounds := false
 var is_dying := false
+var _base_speed: float = 5.0
 
 
 func _ready() -> void:
 	rng.randomize()
+	_base_speed = SPEED
 
 	# Keep bugs on the ground and off of each other's physics bodies.
 	floor_snap_length = 0.5
@@ -112,8 +114,9 @@ func _walk(delta: float) -> void:
 
 	direction = direction.normalized()
 
-	velocity.x = direction.x * SPEED
-	velocity.z = direction.z * SPEED
+	var move_speed := _get_hunt_speed()
+	velocity.x = direction.x * move_speed
+	velocity.z = direction.z * move_speed
 
 	_face_direction(direction, delta)
 	move_and_slide()
@@ -262,6 +265,20 @@ func _play_death() -> void:
 func _on_animation_finished(finished_animation: StringName) -> void:
 	if finished_animation == vanish_animation:
 		queue_free()
+
+
+func _get_hunt_speed() -> float:
+	var gecko := get_tree().get_first_node_in_group(&"gecko") as Gecko
+	if gecko == null or food_item == null:
+		return _base_speed
+
+	if gecko.hunt_target == food_item:
+		var dist := global_position.distance_to(gecko.global_position)
+		var max_dist := 12.0
+		var t := clampf(dist / max_dist, 0.0, 1.0)
+		return lerpf(2.0, 5.0, t)
+
+	return _base_speed
 
 
 func _on_food_item_input_event(camera: Node, event: InputEvent, event_position: Vector3, normal: Vector3, shape_idx: int) -> void:

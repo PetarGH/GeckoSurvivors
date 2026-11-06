@@ -239,7 +239,7 @@ func _build_content(
 	column.add_child(_stat_row(
 		null,
 		"FEEDERS",
-		"%d × %d bugs" % [card.level.spawner_count, card.level.bugs_per_spawner]
+		"%d × %d-%d bugs" % [card.level.spawner_count, card.level.bugs_per_spawner_min, card.level.bugs_per_spawner_max]
 	))
 	column.add_child(_stat_row(
 		TEMP_ICON,
