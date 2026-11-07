@@ -9,6 +9,9 @@ extends CharacterBody3D
 
 @export var SPEED: float = 5.0
 @export var wander_bounds: CSGBox3D
+## Speed multiplier applied while the bug is inside the "SlowDownBugs" box in
+## level.tscn. 0.5 means the bug moves at half speed, so at twice as slow.
+@export_range(0.1, 1.0, 0.05) var slow_zone_multiplier: float = 0.5
 ## How fast the bug swings around to face the way it walks.
 @export var turn_speed_degrees: float = 540.0
 ## Extra yaw applied to the mesh, for bugs whose model does not face +Z.
@@ -268,18 +271,36 @@ func _on_animation_finished(finished_animation: StringName) -> void:
 
 
 func _get_hunt_speed() -> float:
+	var move_speed: float = _base_speed
+
 	var gecko_node := get_tree().get_first_node_in_group(&"gecko")
 	var gecko := gecko_node as Gecko
-	if gecko == null or food_item == null:
-		return _base_speed
-
-	if gecko.hunt_target == food_item:
+	if gecko != null and food_item != null and gecko.hunt_target == food_item:
 		var dist: float = global_position.distance_to(gecko.global_position)
 		var max_dist: float = 12.0
 		var t: float = clampf(dist / max_dist, 0.0, 1.0)
-		return lerpf(2.0, 5.0, t)
+		move_speed = lerpf(2.0, 5.0, t)
 
-	return _base_speed
+	# The SlowDownBugs box in level.tscn halves the speed of every bug inside it.
+	if _is_inside_slow_zone():
+		move_speed *= slow_zone_multiplier
+
+	return move_speed
+
+
+## Returns true while the bug stands inside the "SlowDownBugs" CSGBox3D.
+func _is_inside_slow_zone() -> bool:
+	var slow_zone := get_tree().get_first_node_in_group(&"slow_down_bugs") as CSGBox3D
+	if slow_zone == null or not is_instance_valid(slow_zone):
+		return false
+
+	var half_size: Vector3 = slow_zone.size * 0.5
+	var local_position: Vector3 = slow_zone.to_local(global_position)
+
+	return (
+		absf(local_position.x) <= half_size.x
+		and absf(local_position.z) <= half_size.z
+	)
 
 
 func _on_food_item_input_event(camera: Node, event: InputEvent, event_position: Vector3, normal: Vector3, shape_idx: int) -> void:
