@@ -19,6 +19,9 @@ extends Resource
 @export_group("Simulation Rates")
 @export_range(0.0, 1.0, 0.01) var temp_decay_min: float = 0.05
 @export_range(0.0, 1.0, 0.01) var temp_decay_max: float = 0.2
+## Degrees per second the heat climbs instead of decaying. 0 keeps the normal
+## cooling; level 3 uses this for its heat wave.
+@export_range(0.0, 5.0, 0.05) var temp_rise_rate: float = 0.0
 @export_range(0.0, 1.0, 0.01) var humidity_decay_min: float = 0.15
 @export_range(0.0, 1.0, 0.01) var humidity_decay_max: float = 0.25
 
