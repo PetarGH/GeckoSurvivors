@@ -59,5 +59,14 @@ func _apply_environment(data: LevelData) -> void:
 
 	environment.temp_decay_min = data.temp_decay_min
 	environment.temp_decay_max = data.temp_decay_max
+	environment.temp_rise_rate = data.temp_rise_rate
 	environment.humidity_decay_min = data.humidity_decay_min
 	environment.humidity_decay_max = data.humidity_decay_max
+
+	var terrarium := get_node_or_null(^"Terrarium") as Terrarium
+
+	if terrarium == null:
+		push_warning("Level: Terrarium not found!")
+		return
+
+	terrarium.environment_damage_multiplier = data.env_damage_multiplier

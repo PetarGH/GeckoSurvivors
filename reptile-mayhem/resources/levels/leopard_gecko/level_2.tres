@@ -16,4 +16,5 @@ temp_decay_min = 0.3
 temp_decay_max = 0.4
 humidity_decay_min = 0.3
 humidity_decay_max = 0.4
+env_damage_multiplier = 1.5
 scene = ExtResource("2_scene")

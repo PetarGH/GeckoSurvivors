@@ -27,6 +27,9 @@ const COLOR_TOO_WARM: Color = Color("#F28C38")
 @export_range(0.1, 10.0, 0.1) var decay_interval: float = 1.0
 @export_range(0.0, 1.0, 0.01) var temp_decay_min: float = 0.05
 @export_range(0.0, 1.0, 0.01) var temp_decay_max: float = 0.15
+## Degrees per second the terrarium heats up by. When above 0 the temperature
+## climbs instead of decaying, which is what level 3 uses for its heat wave.
+@export_range(0.0, 5.0, 0.05) var temp_rise_rate: float = 0.0
 @export_range(0.0, 1.0, 0.01) var humidity_decay_min: float = 0.05
 @export_range(0.0, 1.0, 0.01) var humidity_decay_max: float = 0.15
 
@@ -93,23 +96,31 @@ func _process(delta: float) -> void:
 		_apply_random_decay()
 
 
-## Randomly decreases temperature and humidity.
+## Randomly decreases humidity and either decreases the temperature or, when
+## [member temp_rise_rate] is above 0, raises it like a heat wave would.
 func _apply_random_decay() -> void:
-	var temp_loss: float = rng.randf_range(
-		minf(temp_decay_min, temp_decay_max),
-		maxf(temp_decay_min, temp_decay_max)
-	)
-
 	var humidity_loss: float = rng.randf_range(
 		minf(humidity_decay_min, humidity_decay_max),
 		maxf(humidity_decay_min, humidity_decay_max)
 	)
 
-	current_temp = clampf(
-		current_temp - temp_loss,
-		MIN_TEMP,
-		MAX_TEMP
-	)
+	if temp_rise_rate > 0.0:
+		current_temp = clampf(
+			current_temp + temp_rise_rate * decay_interval,
+			MIN_TEMP,
+			MAX_TEMP
+		)
+	else:
+		var temp_loss: float = rng.randf_range(
+			minf(temp_decay_min, temp_decay_max),
+			maxf(temp_decay_min, temp_decay_max)
+		)
+
+		current_temp = clampf(
+			current_temp - temp_loss,
+			MIN_TEMP,
+			MAX_TEMP
+		)
 
 	current_humidity = clampf(
 		current_humidity - humidity_loss,

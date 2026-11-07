@@ -7,13 +7,15 @@
 script = ExtResource("1_data")
 level_number = 3
 level_name = "Desert Blaze"
-description = "Four feeders and a tank that dries out fast."
+description = "Four feeders in a tank that heats up on its own while the air dries out."
 spawner_count = 4
 bugs_per_spawner_min = 11
 bugs_per_spawner_max = 15
 spawn_interval = 2.5
 temp_decay_min = 0.6
 temp_decay_max = 0.8
+temp_rise_rate = 1.5
 humidity_decay_min = 0.7
 humidity_decay_max = 0.9
+env_damage_multiplier = 2.0
 scene = ExtResource("2_scene")
