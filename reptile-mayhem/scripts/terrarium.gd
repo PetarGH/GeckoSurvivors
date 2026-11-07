@@ -12,6 +12,9 @@ signal bad_moisture_time(delta: float)
 @export_group("Environment")
 @export var gecko: Gecko
 @export var environment: EnvironmentManager
+## Scales the damage taken from bad temperature and humidity. Levels raise this
+## as they get harder, so the same bad conditions cost more health.
+@export_range(0.0, 10.0, 0.05) var environment_damage_multiplier: float = 1.0
 
 @export_group("Habitat")
 @export var active_props: Array[Prop] = []
@@ -129,8 +132,12 @@ func _process(delta: float) -> void:
 	if environment.get_humidity_severity() > 0:
 		bad_moisture_time.emit(delta)
 
-	# Calculate damage based on temperature and humidity severity.
-	var damage_rate: float = environment.get_environment_damage_rate()
+	# Calculate damage based on temperature and humidity severity, scaled up by
+	# how harsh the current level is.
+	var damage_rate: float = (
+		environment.get_environment_damage_rate()
+		* environment_damage_multiplier
+	)
 
 	# Apply the calculated damage to the gecko.
 	gecko.process_environment(damage_rate, delta)
