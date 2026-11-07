@@ -495,7 +495,7 @@ material_override = ExtResource("24_wu01b")
 transform = Transform3D(0.17257701, 0, 0, 0, -0.0072315168, 2.1334314, 0, -0.15659757, -0.098519705, 0, 1.0220376, 0)
 texture = ExtResource("15_ux5qa")
 
-[node name="SlowDownBugs" type="CSGBox3D" parent="." groups=["slow_down_bugs"] unique_id=1166986393]
+[node name="SlowDownBugs" type="CSGBox3D" parent="." unique_id=1166986393 groups=["slow_down_bugs"]]
 transform = Transform3D(14.484034, 0, 0, 0, 1.1042548, 0, 0, 0, 9.257524, 0, 0.49455094, 0)
 visible = false
 
