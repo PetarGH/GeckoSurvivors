@@ -3,11 +3,20 @@ class_name Gecko
 extends CharacterBody3D
 ## Represents a gecko inhabitant within a Terrarium.
 
+## Animation clips stored in the gecko's [AnimationPlayer].
+const ANIMATION_IDLE: StringName = &"gekko_idle"
+const ANIMATION_WALK: StringName = &"gekko_walk"
+const ANIMATION_BITE: StringName = &"gekko_bite"
+const ANIMATION_DIE: StringName = &"gekko_die"
+
 signal health_depleted()
 signal health_changed(new_health: float)
 signal points_changed(new_points: int)
 signal good_food_eaten
 signal bad_food_eaten
+## Emitted once the death clip has had time to play, so the lose screen can wait
+## for it instead of cutting the animation off.
+signal death_animation_finished
 var has_died: bool = false
 
 @export var SPEED: float = 5.0
@@ -18,6 +27,11 @@ var has_died: bool = false
 @export var eat_area: Area3D
 @export var eat_distance: float = 1.5
 @export_range(1.0, 10.0, 0.1) var hunt_speed_multiplier: float = 3.0
+
+@export_group("Animation")
+## How long the death clip is given before the run ends. Longer clips play in
+## full; short or missing clips still take at least this long.
+@export_range(0.0, 5.0, 0.1) var death_animation_time: float = 1.0
 
 @export var species_data: GeckoSpeciesData:
 	set(value):
@@ -58,6 +72,10 @@ var is_waiting_to_roam: bool = false
 var hunt_target: FoodItem = null
 var waiting_food: Array[FoodItem] = []
 
+# True while the one-shot bite clip is still playing.
+var _is_biting: bool = false
+var _death_animation_finished: bool = false
+
 var environmental_damage_timer: float = 0.0
 var environmental_damage_accumulated: float = 0.0
 
@@ -65,6 +83,8 @@ var environmental_damage_accumulated: float = 0.0
 func _ready() -> void:
 	add_to_group(&"gecko")
 	rng.randomize()
+
+	_setup_animations()
 
 	if species_data != null:
 		current_health = species_data.max_health
@@ -91,7 +111,94 @@ func _on_health_depleted() -> void:
 	velocity = Vector3.ZERO
 	set_physics_process(false)
 	set_process(false)
-	
+
+	_play_death_animation()
+
+
+## Keeps idle and walk looping and bite and die one-shot, so the clips behave
+## the same however they were imported, and starts out idle.
+func _setup_animations() -> void:
+	if animation_player == null:
+		return
+
+	_set_clip_loop(ANIMATION_IDLE, Animation.LOOP_LINEAR)
+	_set_clip_loop(ANIMATION_WALK, Animation.LOOP_LINEAR)
+	_set_clip_loop(ANIMATION_BITE, Animation.LOOP_NONE)
+	_set_clip_loop(ANIMATION_DIE, Animation.LOOP_NONE)
+
+	animation_player.animation_finished.connect(_on_animation_finished)
+	_play_animation(ANIMATION_IDLE)
+
+
+func _set_clip_loop(animation_name: StringName, loop_mode: Animation.LoopMode) -> void:
+	if not animation_player.has_animation(animation_name):
+		return
+
+	animation_player.get_animation(animation_name).loop_mode = loop_mode
+
+
+## Plays [param animation_name] unless it is already the clip that is running.
+func _play_animation(animation_name: StringName) -> void:
+	if animation_player == null or not animation_player.has_animation(animation_name):
+		return
+
+	if animation_player.current_animation == animation_name:
+		return
+
+	animation_player.play(animation_name)
+
+
+## Shows the idle clip when the gecko stands still and the walk clip while it
+## moves. Biting and dying keep their own clip.
+func _update_movement_animation() -> void:
+	if not is_alive() or _is_biting:
+		return
+
+	var horizontal_speed: float = Vector2(velocity.x, velocity.z).length()
+
+	_play_animation(ANIMATION_WALK if horizontal_speed > 0.1 else ANIMATION_IDLE)
+
+
+## Bites down on a bug. The gecko keeps the bite clip until it has finished.
+func _play_bite_animation() -> void:
+	if animation_player == null or not animation_player.has_animation(ANIMATION_BITE):
+		return
+
+	_is_biting = true
+	animation_player.play(ANIMATION_BITE)
+
+
+func _on_animation_finished(animation_name: StringName) -> void:
+	if animation_name == ANIMATION_BITE:
+		_is_biting = false
+
+
+## Plays the death clip and waits for it (or for [member death_animation_time]
+## when the clip is shorter) before letting the run end.
+func _play_death_animation() -> void:
+	var wait_time: float = death_animation_time
+
+	if animation_player != null and animation_player.has_animation(ANIMATION_DIE):
+		animation_player.play(ANIMATION_DIE)
+		wait_time = maxf(
+			death_animation_time,
+			animation_player.get_animation(ANIMATION_DIE).length
+		)
+
+	await get_tree().create_timer(wait_time).timeout
+
+	_death_animation_finished = true
+	death_animation_finished.emit()
+
+
+## Waits for the death clip to finish, so the lose screen can let it play out.
+func wait_for_death_animation() -> void:
+	if _death_animation_finished or not has_died:
+		return
+
+	await death_animation_finished
+
+
 ## Assign or change the gecko's roaming bounds.
 func set_wander_target(target: CSGBox3D) -> void:
 	wander_bounds = target
@@ -231,6 +338,8 @@ func _eat_hunted_food() -> void:
 	feed(food)
 
 func _physics_process(delta: float) -> void:
+	_update_movement_animation()
+
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 		
@@ -401,6 +510,8 @@ func feed(food: FoodItem) -> void:
 
 	# Remember where the bug was before it gets removed.
 	var bug_position: Vector3 = food.global_position
+
+	_play_bite_animation()
 
 	if species_data.is_food_accepted(food.food_type):
 		# CORRECT FOOD
