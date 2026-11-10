@@ -8,8 +8,11 @@ const TEMP_ICON: Texture2D = preload(
 )
 const DROP_ICON: Texture2D = preload("res://images/water-drop-icon-png.png")
 const GECKO_MESH: PackedScene = preload(
-	"res://meshes/M_Gekko_Player_Blockout.glb"
+	"res://meshes/M_gekko_player.glb"
 )
+## Clips in the gecko model's [AnimationPlayer].
+const ANIMATION_IDLE: StringName = &"gekko_idle"
+const ANIMATION_BITE: StringName = &"gekko_bite"
 
 const MENU_SCENE := "res://scenes/main_menu_scene.tscn"
 
@@ -40,6 +43,7 @@ var _portrait_frame: PanelContainer
 var _viewport: SubViewport
 var _spin_pivot: Node3D
 var _model_root: Node3D
+var _animation_player: AnimationPlayer
 var _hint: Label
 
 var _spin: float = 0.6
@@ -58,6 +62,12 @@ func _ready() -> void:
 	_build_card_content()
 	_setup_portrait()
 	_play_intro()
+
+	# Back has its own sound, so it should not also tick like a plain button.
+	var back_button := get_node_or_null(^"BackButton") as Button
+
+	if back_button != null:
+		back_button.set_meta(Audio.SILENT_CLICK_META, true)
 
 
 func _process(delta: float) -> void:
@@ -98,6 +108,8 @@ func _build_card() -> void:
 
 	_card = Button.new()
 	_card.name = "GeckoCard"
+	# Picking the gecko plays its own chime instead of the button tick.
+	_card.set_meta(Audio.SILENT_CLICK_META, true)
 	_card.text = ""
 	_card.focus_mode = Control.FOCUS_ALL
 	_card.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
@@ -234,6 +246,9 @@ func _setup_portrait() -> void:
 	_spin_pivot.add_child(_model_root)
 	_spin_pivot.rotation_degrees.y = -25.0
 
+	_animation_player = _model_root.get_node_or_null(^"AnimationPlayer") as AnimationPlayer
+	_setup_portrait_animations()
+
 	# Wait for the layout and the mesh transforms before framing the shot.
 	await get_tree().process_frame
 	await get_tree().process_frame
@@ -242,6 +257,47 @@ func _setup_portrait() -> void:
 		return
 
 	_frame_portrait()
+
+
+## Idles the portrait gecko, and lets the bite play once on top of it.
+func _setup_portrait_animations() -> void:
+	if _animation_player == null:
+		return
+
+	if _animation_player.has_animation(ANIMATION_IDLE):
+		_animation_player.get_animation(ANIMATION_IDLE).loop_mode = Animation.LOOP_LINEAR
+
+	if _animation_player.has_animation(ANIMATION_BITE):
+		_animation_player.get_animation(ANIMATION_BITE).loop_mode = Animation.LOOP_NONE
+
+	_animation_player.animation_finished.connect(_on_portrait_animation_finished)
+	_play_portrait_animation(ANIMATION_IDLE)
+
+
+## Plays [param animation_name] unless it is already the clip that is running.
+func _play_portrait_animation(animation_name: StringName) -> void:
+	if _animation_player == null or not _animation_player.has_animation(animation_name):
+		return
+
+	if _animation_player.current_animation == animation_name:
+		return
+
+	_animation_player.play(animation_name)
+
+
+## Bites down when the player hovers the card to select the gecko.
+func _play_portrait_bite() -> void:
+	if _animation_player == null or not _animation_player.has_animation(ANIMATION_BITE):
+		return
+
+	_animation_player.play(ANIMATION_BITE)
+
+
+func _on_portrait_animation_finished(animation_name: StringName) -> void:
+	if animation_name != ANIMATION_BITE:
+		return
+
+	_play_portrait_animation(ANIMATION_IDLE)
 
 
 ## Centres the model and fits the camera to its bounding box.
@@ -497,7 +553,10 @@ func _refresh_hover() -> void:
 		return
 
 	_hovered = hovered
-	_target_spin = 2.2 if hovered else 0.6
+
+	# Hovering keeps the same turning speed and bites instead of spinning faster.
+	if hovered:
+		_play_portrait_bite()
 
 	# The intro animation would fight the hover scale if both ran at once.
 	if _intro_tween != null and _intro_tween.is_valid():
@@ -521,6 +580,8 @@ func _refresh_hover() -> void:
 func _on_card_pressed() -> void:
 	if _leaving:
 		return
+
+	Audio.play_sfx(Audio.GECKO_SELECTED)
 
 	_leaving = true
 	_card.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -556,6 +617,8 @@ func _leave_to(next_scene: PackedScene) -> void:
 
 
 func _leave_to_menu() -> void:
+	Audio.play_sfx(Audio.UI_BACK)
+
 	_leaving = true
 	await _fade_out()
 	get_tree().change_scene_to_file(MENU_SCENE)

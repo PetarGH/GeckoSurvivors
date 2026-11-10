@@ -7,6 +7,13 @@ extends CharacterBody3D
 ## [code]Visual[/code] node that carries the bug's mesh, so the same clips work for
 ## every bug scene.
 
+## Slap sounds played when the player clicks the bug, picked at random.
+const HIT_SOUNDS: Array[AudioStream] = [
+	preload("res://audio/sfx/slap-bug-1.wav"),
+	preload("res://audio/sfx/slap-bug-2.wav"),
+	preload("res://audio/sfx/slap-bug-3.wav"),
+]
+
 @export var SPEED: float = 5.0
 @export var wander_bounds: CSGBox3D
 ## Speed multiplier applied while the bug is inside the "SlowDownBugs" box in
@@ -306,6 +313,7 @@ func _is_inside_slow_zone() -> bool:
 func _on_food_item_input_event(camera: Node, event: InputEvent, event_position: Vector3, normal: Vector3, shape_idx: int) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			Audio.play_random_sfx(HIT_SOUNDS)
 			die()
 
 

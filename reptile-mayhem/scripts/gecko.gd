@@ -9,6 +9,16 @@ const ANIMATION_WALK: StringName = &"gekko_walk"
 const ANIMATION_BITE: StringName = &"gekko_bite"
 const ANIMATION_DIE: StringName = &"gekko_die"
 
+## Sound played every time the gecko bites down on a bug.
+const BITE_SOUND: AudioStream = preload("res://audio/sfx/gecko-bite.wav")
+## Sounds played when the gecko eats food it should not, picked at random.
+const BAD_FOOD_SOUNDS: Array[AudioStream] = [
+	preload("res://audio/sfx/gecko-ate-bad-1.wav"),
+	preload("res://audio/sfx/gecko-ate-bad-2.wav"),
+]
+## Sound played once the gecko's health runs out.
+const DEATH_SOUND: AudioStream = preload("res://audio/sfx/gecko-die.mp3")
+
 signal health_depleted()
 signal health_changed(new_health: float)
 signal points_changed(new_points: int)
@@ -107,6 +117,8 @@ func _on_health_depleted() -> void:
 
 	has_died = true
 
+	Audio.play_sfx(DEATH_SOUND)
+
 	# Stop the gecko from moving.
 	velocity = Vector3.ZERO
 	set_physics_process(false)
@@ -161,6 +173,8 @@ func _update_movement_animation() -> void:
 
 ## Bites down on a bug. The gecko keeps the bite clip until it has finished.
 func _play_bite_animation() -> void:
+	Audio.play_sfx(BITE_SOUND)
+
 	if animation_player == null or not animation_player.has_animation(ANIMATION_BITE):
 		return
 
@@ -533,6 +547,7 @@ func feed(food: FoodItem) -> void:
 
 	else:
 		# INCORRECT FOOD
+		Audio.play_random_sfx(BAD_FOOD_SOUNDS)
 		bad_food_eaten.emit()
 		var damage: float = species_data.incorrect_food_damage
 
