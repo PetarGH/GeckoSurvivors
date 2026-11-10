@@ -1,6 +1,9 @@
 extends "res://scripts/end_screen.gd"
 ## Shows the lose screen when the gecko dies.
 
+## Music played under the stats of a run that ended with a dead gecko.
+const DEATH_MUSIC: AudioStream = preload("res://audio/music/gecko-died-music.wav")
+
 @export var gecko: Gecko
 
 
@@ -21,3 +24,4 @@ func _on_gecko_died() -> void:
 
 	if is_inside_tree():
 		show_screen()
+		Audio.play_music(DEATH_MUSIC)

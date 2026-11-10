@@ -2,6 +2,8 @@ extends "res://scripts/end_screen.gd"
 ## Shows the win screen once every bug is gone from the terrarium.
 
 const CHECK_INTERVAL: float = 0.25
+## Music played under the stats of a run the player won.
+const WIN_MUSIC: AudioStream = preload("res://audio/music/win-music.wav")
 
 @export var spawners: Array[Node] = []
 @export var gecko: Gecko
@@ -30,6 +32,7 @@ func _check_for_win() -> void:
 
 	_check_timer.stop()
 	show_screen()
+	Audio.play_music(WIN_MUSIC)
 
 
 ## Returns true once the spawners are done and no bug is left in the terrarium.
