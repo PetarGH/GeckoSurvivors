@@ -16,4 +16,8 @@ func _ready() -> void:
 
 
 func _on_gecko_died() -> void:
-	show_screen()
+	# Let the gecko's death animation play out in the terrarium first.
+	await gecko.wait_for_death_animation()
+
+	if is_inside_tree():
+		show_screen()
