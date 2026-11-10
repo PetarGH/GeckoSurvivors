@@ -76,6 +76,12 @@ func _ready() -> void:
 	_build_row()
 	_play_intro()
 
+	# Back has its own sound, so it should not also tick like a plain button.
+	var back_button := get_node_or_null(^"BackButton") as Button
+
+	if back_button != null:
+		back_button.set_meta(Audio.SILENT_CLICK_META, true)
+
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel") and not _leaving:
@@ -136,6 +142,8 @@ func _build_card(level: LevelData, index: int, parent: Node) -> LevelCard:
 	var cleared := GameSession.has_cleared(_species, level)
 
 	card.button = Button.new()
+	# Picking a level plays its own chime instead of the button tick.
+	card.button.set_meta(Audio.SILENT_CLICK_META, true)
 	card.button.name = "Level%dCard" % level.level_number
 	card.button.text = ""
 	card.button.custom_minimum_size = CARD_SIZE
@@ -575,6 +583,8 @@ func _on_card_pressed(card: LevelCard) -> void:
 	if _leaving:
 		return
 
+	Audio.play_sfx(Audio.LEVEL_SELECTED)
+
 	_leaving = true
 	GameSession.select_level(card.level)
 
@@ -612,6 +622,8 @@ func _on_back_button_pressed() -> void:
 
 
 func _leave_to_gecko_select() -> void:
+	Audio.play_sfx(Audio.UI_BACK)
+
 	_leaving = true
 	await _fade_out()
 	get_tree().change_scene_to_file(GECKO_SCENE)

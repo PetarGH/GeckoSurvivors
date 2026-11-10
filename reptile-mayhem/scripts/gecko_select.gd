@@ -59,6 +59,12 @@ func _ready() -> void:
 	_setup_portrait()
 	_play_intro()
 
+	# Back has its own sound, so it should not also tick like a plain button.
+	var back_button := get_node_or_null(^"BackButton") as Button
+
+	if back_button != null:
+		back_button.set_meta(Audio.SILENT_CLICK_META, true)
+
 
 func _process(delta: float) -> void:
 	if is_instance_valid(_spin_pivot):
@@ -98,6 +104,8 @@ func _build_card() -> void:
 
 	_card = Button.new()
 	_card.name = "GeckoCard"
+	# Picking the gecko plays its own chime instead of the button tick.
+	_card.set_meta(Audio.SILENT_CLICK_META, true)
 	_card.text = ""
 	_card.focus_mode = Control.FOCUS_ALL
 	_card.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
@@ -522,6 +530,8 @@ func _on_card_pressed() -> void:
 	if _leaving:
 		return
 
+	Audio.play_sfx(Audio.GECKO_SELECTED)
+
 	_leaving = true
 	_card.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_card.focus_mode = Control.FOCUS_NONE
@@ -556,6 +566,8 @@ func _leave_to(next_scene: PackedScene) -> void:
 
 
 func _leave_to_menu() -> void:
+	Audio.play_sfx(Audio.UI_BACK)
+
 	_leaving = true
 	await _fade_out()
 	get_tree().change_scene_to_file(MENU_SCENE)
