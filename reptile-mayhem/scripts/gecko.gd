@@ -32,6 +32,8 @@ var has_died: bool = false
 @export var feedback_height: float = 0.3
 
 @onready var nav_agent: NavigationAgent3D = _find_navigation_agent(self)
+@onready var animation_player: AnimationPlayer = $M_gekko_player/AnimationPlayer
+
 
 func _find_navigation_agent(node: Node) -> NavigationAgent3D:
 	for child in node.get_children():

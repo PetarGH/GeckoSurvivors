@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://04m3vn054f8n" path="res://scripts/gecko.gd" id="1_gecko"]
 [ext_resource type="Resource" uid="uid://dyms6hjfemdk6" path="res://resources/default_gecko_species.tres" id="2_species"]
+[ext_resource type="PackedScene" uid="uid://bgg14kg8k0lym" path="res://meshes/M_gekko_player.glb" id="3_04oll"]
 [ext_resource type="PackedScene" uid="uid://b1agt0atug66j" path="res://meshes/M_Gekko_Player_Blockout.glb" id="3_yg0sq"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_gecko"]
@@ -12,8 +13,56 @@ height = 1.4
 script = ExtResource("1_gecko")
 species_data = ExtResource("2_species")
 
+[node name="M_gekko_player" parent="." unique_id=1624036380 instance=ExtResource("3_04oll")]
+
+[node name="Skeleton3D" parent="M_gekko_player/root" parent_id_path=PackedInt32Array(1624036380, 1125145444) index="0" unique_id=1780413809]
+bones/1/position = Vector3(9.022457e-08, 0.22860579, -0.5160243)
+bones/1/rotation = Quaternion(0.7019696, -2.884754e-06, -2.7243323e-06, 0.7122069)
+bones/2/rotation = Quaternion(0.9992588, -0.03631965, -6.619786e-05, -0.01275972)
+bones/3/rotation = Quaternion(-0.012956412, -6.921677e-05, 0.036319587, 0.99925625)
+bones/4/rotation = Quaternion(0.0066127796, -0.0002997761, 0.03631843, 0.99931836)
+bones/5/rotation = Quaternion(-0.016314404, -0.0006523614, 0.0363138, 0.999207)
+bones/6/rotation = Quaternion(0.570007, 0.81310856, -0.057395153, 0.10321015)
+bones/7/rotation = Quaternion(-0.006298786, -0.60919863, 0.12736763, 0.78269726)
+bones/8/rotation = Quaternion(-2.838738e-07, 8.561818e-08, 0.43825573, 0.8988503)
+bones/9/rotation = Quaternion(-0.1317658, -0.70518476, 0.5376251, -0.44307077)
+bones/10/rotation = Quaternion(0.034768134, 0.9986919, 0.037490577, 0.00034775803)
+bones/11/rotation = Quaternion(-0.5575156, 0.81980985, -0.08962586, -0.09516027)
+bones/12/rotation = Quaternion(-0.010887435, 0.60398746, -0.1454818, 0.7835278)
+bones/13/rotation = Quaternion(-1.2630484e-06, -8.2579163e-07, -0.51934284, 0.854566)
+bones/14/rotation = Quaternion(0.1918984, -0.6981341, 0.563049, 0.39844644)
+bones/15/rotation = Quaternion(-0.034768157, 0.9986919, 0.037490763, -0.00034775658)
+bones/16/rotation = Quaternion(-0.041339736, -0.00011260035, -0.0031954187, 0.99914014)
+bones/17/rotation = Quaternion(0.574481, 0.7587131, 0.1370344, 0.27485946)
+bones/18/rotation = Quaternion(-0.016547076, -0.82577556, 0.00681943, 0.5637149)
+bones/19/rotation = Quaternion(-9.269327e-08, 1.158729e-07, 0.20198333, 0.97938895)
+bones/20/rotation = Quaternion(-0.03382623, 0.91157913, -0.36572874, 0.18472128)
+bones/21/rotation = Quaternion(0.026305985, 0.9993811, 0.015661152, -0.017329197)
+bones/22/rotation = Quaternion(-0.7125288, 0.6641857, 0.22309548, -0.037261464)
+bones/23/rotation = Quaternion(-0.039054938, 0.8252731, -0.02077509, 0.5629986)
+bones/24/rotation = Quaternion(8.6695835e-08, 3.6514058e-07, -0.282255, 0.95933944)
+bones/25/rotation = Quaternion(-0.0007726456, 0.7830522, -0.51796347, -0.3443)
+bones/26/rotation = Quaternion(-0.026306413, 0.9993811, 0.015661294, 0.017329108)
+bones/27/rotation = Quaternion(-0.033422828, -0.00029455667, -0.0047051804, 0.9994303)
+bones/28/rotation = Quaternion(-0.10312112, 0.006849591, 0.06591352, 0.9924588)
+bones/29/rotation = Quaternion(-0.15317361, 0.011539909, -0.07424772, 0.98533857)
+bones/30/rotation = Quaternion(0.21869731, -0.006584838, -0.07191744, 0.9731167)
+bones/31/position = Vector3(0.09419183, 0.17027296, -0.06386913)
+bones/31/rotation = Quaternion(0.43604866, 0.82070595, -0.32258835, -0.17955558)
+bones/31/scale = Vector3(1, 0.9999996, 1)
+bones/32/position = Vector3(-0.09419928, 0.17027302, -0.06385653)
+bones/32/rotation = Quaternion(-0.43606988, 0.82071817, -0.32255927, 0.17950039)
+bones/32/scale = Vector3(1.0000001, 0.9999999, 0.99999994)
+bones/33/rotation = Quaternion(0.010208182, 3.511704e-05, -5.441229e-07, 0.9999479)
+
+[node name="AnimationPlayer" parent="M_gekko_player" index="1" unique_id=1974394719]
+autoplay = &"gekko_idle"
+
 [node name="M_Gekko_Player_Blockout" parent="." unique_id=271503607 instance=ExtResource("3_yg0sq")]
+visible = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=453753301]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.17700583, 0.025000095)
 shape = SubResource("CapsuleShape3D_gecko")
+
+[editable path="M_gekko_player"]
