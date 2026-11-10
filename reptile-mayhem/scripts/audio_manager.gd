@@ -58,12 +58,15 @@ func _play_button_click(button: BaseButton) -> void:
 
 
 ## Plays [param stream] once, layered over whatever is already playing.
-func play_sfx(stream: AudioStream) -> void:
+## [param pitch_scale] shifts the pitch, which keeps repeated mechanical
+## sounds such as the dial notches from sounding like one looped sample.
+func play_sfx(stream: AudioStream, pitch_scale: float = 1.0) -> void:
 	if stream == null:
 		return
 
 	var player := AudioStreamPlayer.new()
 	player.stream = stream
+	player.pitch_scale = pitch_scale
 	player.finished.connect(player.queue_free)
 	add_child(player)
 	player.play()
