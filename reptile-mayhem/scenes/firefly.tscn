@@ -216,7 +216,7 @@ shape = SubResource("SphereShape3D_c74hx")
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=2132024037]
 
 [node name="Visual" type="Node3D" parent="." unique_id=43089299]
-transform = Transform3D(0.99280864, -0.119712204, 0, 0.11599064, 0.96194464, -0.24740396, 0.029617274, 0.2456248, 0.9689124, 0, 0.22, 0)
+transform = Transform3D(0.99280864, -0.119712204, 0, 0.119712204, 0.99280864, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="M_Firefly" parent="Visual" unique_id=2071675281 instance=ExtResource("3_mesh")]
 
@@ -226,6 +226,12 @@ libraries/ = SubResource("AnimationLibrary_bug")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1204472865]
 transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 0.8152045, 0)
 shape = SubResource("SphereShape3D_8vrlf")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=721104413]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4249239, 0.18367565)
+light_color = Color(0, 0.6519918, 0.26207528, 1)
+light_energy = 5.0
+light_size = 0.5
 
 [connection signal="input_event" from="FoodItem" to="." method="_on_food_item_input_event"]
 

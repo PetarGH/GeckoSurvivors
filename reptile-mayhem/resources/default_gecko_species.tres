@@ -6,7 +6,6 @@
 script = ExtResource("1_species")
 species_name = "Leopard Gecko"
 species_id = "leopard_gecko"
-ideal_temp_range = Vector2(24, 30)
 ideal_humidity_range = Vector2(30, 40)
 env_damage_rate = 2.0
 preferred_biome = 2
