@@ -35,9 +35,9 @@
 [sub_resource type="Environment" id="Environment_1vivr"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_1vivr"]
-vertices = PackedVector3Array(-20.374268, 0.52, -14.5, -20.374268, 0.52, 14.5, 18.625732, 0.52, 14.5, 18.625732, 0.52, -14.5)
+vertices = PackedVector3Array(-20.374266, 0.55, -14.499999, -20.374266, 0.55, 14.500001, 18.625734, 0.55, 14.500001, 18.625734, 0.55, -14.499999)
 polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1)]
-cell_height = 0.01
+cell_height = 0.03
 agent_max_slope = 70.67
 vertices_per_polygon = 8.0
 
@@ -188,16 +188,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0047346354, 0.008702278, -0
 gecko = NodePath("../Gecko")
 environment = NodePath("EnvironmentManager")
 
-[node name="M_Broken_Terrarium" parent="Terrarium" unique_id=586817626 instance=ExtResource("12_w3o6u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.40161055, 0, 0.23650663)
-
-[node name="M_Terrarium" parent="Terrarium" index="1" unique_id=125556667]
+[node name="M_Terrarium" parent="Terrarium" index="0" unique_id=125556667]
 visible = false
 
-[node name="EnvironmentManager" parent="Terrarium" index="3" unique_id=564750640]
+[node name="EnvironmentManager" parent="Terrarium" index="2" unique_id=564750640]
 temp_decay_max = 0.2
 humidity_decay_min = 0.15
 humidity_decay_max = 0.25
+
+[node name="M_Broken_Terrarium" parent="Terrarium" unique_id=586817626 instance=ExtResource("12_w3o6u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.40161055, 0, 0.23650663)
 
 [node name="Node" type="Node" parent="." unique_id=2127695471 node_paths=PackedStringArray("countdown_timer", "countdown_label", "spawners")]
 script = ExtResource("4_mx8sn")

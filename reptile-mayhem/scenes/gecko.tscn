@@ -14,6 +14,7 @@ script = ExtResource("1_gecko")
 species_data = ExtResource("2_species")
 
 [node name="M_gekko_player" parent="." unique_id=1624036380 instance=ExtResource("3_04oll")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.029075682, 0)
 
 [node name="Skeleton3D" parent="M_gekko_player/root" parent_id_path=PackedInt32Array(1624036380, 1125145444) index="0" unique_id=1780413809]
 bones/1/position = Vector3(9.022457e-08, 0.22860579, -0.5160243)
